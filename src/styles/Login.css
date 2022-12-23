@@ -1,0 +1,118 @@
+.login-form-container,
+.switch-container {
+  border: 10px solid #a7a79f;
+  border-radius: 20px;
+  padding: 7px;
+  background-color: #323338;
+  width: 580px;
+}
+
+.login-form-container > div,
+.switch-container > div {
+  background-color: #595960;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 10px;
+}
+
+.switch-container {
+  margin-top: 20px;
+}
+
+.login-fields-container {
+  display: flex;
+  width: 100%;
+}
+
+.login-form,
+.login-field-labels {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-field-labels {
+  padding: 20px;
+  color: #8cc2ee;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    #45290d,
+    #45290d 20px,
+    #bf8127 20px,
+    #bf8127 40px
+  );
+  flex: 1;
+}
+
+.login-field-labels div {
+  text-transform: uppercase;
+  font-size: 2rem;
+  padding: 15px;
+  border: 5px solid #131313;
+  z-index: 1;
+  background-color: #201f1c;
+  width: 100%;
+}
+
+.login-field-labels div:not(:first-child),
+.login-fields input:not(:first-child) {
+  margin-top: 20px;
+}
+
+.login-fields {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #212225;
+  flex: 2;
+  padding: 15px;
+}
+
+.login-fields input {
+  color: #f90404;
+  text-shadow: 0px 0px 4px #f90404;
+  background-color: #080401;
+  font-size: 1.25rem;
+  padding: 20px;
+  border: none;
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 100%;
+}
+
+.login-fields input:hover {
+  cursor: pointer;
+}
+
+.login-fields input:required {
+  background-color: #080401;
+}
+
+.login-signup--button {
+  background-color: #699b42;
+  margin: 20px 20px 0px 20px;
+  width: 100%;
+}
+
+.login-switch--button {
+  margin: 5px;
+  background-color: #005294;
+}
+
+.login-fields input.invalid-username-or-password--error,
+.login-fields input.username-already-taken--error {
+  border: 1px solid #f90404;
+}
+
+.login-fields div.invalid-username-or-password--message,
+.login-fields div.username-already-taken--message {
+  color: #f90404;
+  text-transform: uppercase;
+  font-weight: 600;
+  position: absolute;
+  font-size: 0.9rem;
+}

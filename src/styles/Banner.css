@@ -1,0 +1,91 @@
+.banner {
+  text-transform: uppercase;
+  font-size: 3rem;
+  font-weight: 700;
+  padding: 0.25rem 1rem;
+  border-radius: 1rem;
+  font-family: 'Courier';
+  mask-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/8399/grunge.png');
+  /* mask-size: 944px 604px; */
+  -webkit-mask-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/8399/grunge.png');
+  /* -webkit-mask-size: 944px 604px; */
+  mix-blend-mode: multiply;
+  border-width: 1rem;
+}
+
+.stamp {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 4rem;
+  padding: 0.25rem 1rem;
+  font-family: 'Courier';
+  mask-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/8399/grunge.png');
+  /* mask-size: 944px 604px; */
+  -webkit-mask-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/8399/grunge.png');
+  /* -webkit-mask-size: 944px 604px; */
+  mix-blend-mode: multiply;
+}
+
+.failed--banner,
+.diffused--banner {
+  font-size: 8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-width: 1rem;
+}
+
+.failed--stamp,
+.failed--banner {
+  color: #ff0000;
+  border-color: #ff0000;
+}
+
+.failed--banner,
+.diffused--banner {
+  mask-position: 13rem 6rem;
+  -webkit-mask-position: 13rem 6rem;
+  transform: rotate(-3deg);
+  border: 1rem solid;
+}
+
+.failed--stamp,
+.diffused--stamp,
+.no-games--stamp {
+  mask-position: 5rem 5rem;
+  -webkit-mask-position: 5rem 5rem;
+  transform: rotate(-3deg);
+  border: 0.5rem solid;
+}
+
+.diffused--stamp,
+.diffused--banner {
+  color: #0a9928;
+  border-color: #0a9928;
+}
+
+.activating--banner {
+  font-size: 4rem;
+  color: rgba(255, 255, 255, 0.87);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.activating--banner > * {
+  margin: 50px;
+}
+
+.banner-container {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

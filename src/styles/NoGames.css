@@ -1,0 +1,36 @@
+.no-games {
+  height: 500px;
+  background-image: url('https://www.toptal.com/designers/subtlepatterns/patterns/paper.png');
+  background-repeat: repeat;
+  width: 530px;
+  display: flex;
+  flex-direction: column;
+  color: #111;
+}
+
+.no-games--header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.5rem;
+  padding: 15px;
+}
+
+.no-games--body {
+  border: 1.5px solid #111;
+  border-radius: 3px;
+  margin: 0px 20px 0px 20px;
+}
+
+.no-games--status {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  margin: 25px;
+}
+
+.no-game--links {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}

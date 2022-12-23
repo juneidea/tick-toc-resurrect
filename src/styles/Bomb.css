@@ -1,0 +1,7 @@
+.bomb--activated {
+  display: initial;
+}
+
+.bomb--activating {
+  display: none;
+}

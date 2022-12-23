@@ -1,0 +1,97 @@
+.single-game,
+.leaders {
+  background-image: url('https://www.toptal.com/designers/subtlepatterns/patterns/paper.png');
+  background-repeat: repeat;
+  width: 530px;
+  display: flex;
+  flex-direction: column;
+  color: #111;
+}
+
+.leaders {
+  height: 500px;
+}
+
+.single-game .typed {
+  font-weight: 600;
+}
+
+.single-game .written {
+  font-family: 'Indie Flower';
+  font-size: 1.5rem;
+}
+
+.single-game--header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.5rem;
+  padding: 15px;
+}
+
+.single-game--header :first-child {
+  text-decoration: underline;
+}
+
+.single-game--date,
+.single-game--config,
+.single-game--result {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.single-game--date :first-child,
+.single-game--config :first-child,
+.single-game--result :first-child {
+  align-self: flex-start;
+  margin: 5px 0px 0px 10px;
+}
+
+.single-game--date :last-child,
+.single-game--result :last-child {
+  margin-bottom: 5px;
+}
+
+.single-game--date,
+.single-game--config {
+  border-bottom: 1.5px solid #111;
+}
+
+.single-game--config div {
+  margin-top: 10px;
+}
+
+.single-game--config div span {
+  padding: 0px 35px 0px 35px;
+}
+
+.single-game--config div :nth-child(2) {
+  border-left: 1.5px solid #111;
+  border-right: 1.5px solid #111;
+}
+
+.single-game--body {
+  border: 1.5px solid #111;
+  border-radius: 3px;
+  margin: 0px 20px 0px 20px;
+}
+
+.single-game--details {
+  display: flex;
+  flex-direction: column;
+}
+
+.single-game--details .written {
+  font-size: 2rem;
+}
+
+.single-game--status {
+  margin: 25px;
+}
+
+.single-game--links {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}

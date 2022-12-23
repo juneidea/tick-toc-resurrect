@@ -1,0 +1,14 @@
+.loader {
+  font-size: 4rem;
+  color: rgba(255, 255, 255, 0.87);
+  animation: loader 1.5s linear infinite;
+}
+
+@keyframes loader {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

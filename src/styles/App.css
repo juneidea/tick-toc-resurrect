@@ -1,0 +1,32 @@
+#app {
+  text-align: center;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  color: rgba(255, 255, 255, 0.87);
+}
+
+.title {
+  font-family: 'Digital';
+  font-size: 8rem;
+  color: #f90404;
+  margin-top: 10px;
+  animation: ticktoc 1s linear infinite;
+}
+
+@keyframes ticktoc {
+  0% {
+    text-shadow: 0px 0px 0px #f90404;
+  }
+
+  50% {
+    text-shadow: 0px 0px 20px #f90404;
+  }
+
+  100% {
+    text-shadow: 0px 0px 0px #f90404;
+  }
+}
