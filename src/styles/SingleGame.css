@@ -1,6 +1,6 @@
 .single-game,
 .leaders {
-  background-image: url('https://www.toptal.com/designers/subtlepatterns/patterns/paper.png');
+  background-image: url('/public/paper.png');
   background-repeat: repeat;
   width: 530px;
   display: flex;
