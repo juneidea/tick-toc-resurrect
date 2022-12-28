@@ -1,70 +1,11 @@
-# Getting Started with Create React App
+[![Coverage Status](https://coveralls.io/repos/github/tick-toc/tick-toc2/badge.svg?branch=master)](https://coveralls.io/github/tick-toc/tick-toc2?branch=master)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Tick Toc
 
-## Available Scripts
+Tick Toc is a reverse-engineered web application of the popular game, [Keep Talking and Nobody Explodes](https://keeptalkinggame.com/). One "Diffuser" and one or more "Experts" communicate in a collaborative effort to defuse a bomb before the countdown strikes zero. This project was built by [@juneidea](https://github.com/juneidea), [@celipas](https://github.com/celipas), and [@evanalto](https://github.com/EvanAlto), over the course of 2.5 weeks, during our amazing time at the [Fullstack Academy of Code](https://www.fullstackacademy.com/). You may play for yourself at <https://tick-toc2.herokuapp.com>. 
 
-In the project directory, you can run:
+For more information regarding this student project, please click and watch the video below:
 
-### `npm start`
+[![TICK TOC PRESENTATION](https://img.youtube.com/vi/zgzjM1lHdI4/0.jpg)](https://www.youtube.com/watch?v=zgzjM1lHdI4&list=PLx0iOsdUOUmmL875tGLv6WKi_JSPzrrrQ&index=28&t=0s)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project was made purely for fun and educational purposes. Thank you, Steel Crate Games for the inspiration.
