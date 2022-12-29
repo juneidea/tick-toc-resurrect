@@ -5,6 +5,7 @@ import './styles/App.css'
 import './styles/Loader.css'
 import Login from './Login'
 import Main from './Main'
+import NewGame from './NewGame'
 import PreviousGames from './PreviousGames'
 import Leaderboard from './Leaderboard'
 import Manual from './Manual'
@@ -21,6 +22,7 @@ const App = () => {
       {userName ? (      
       <Routes>
         <Route exact path="/" element={<Main setUserName={setUserName} />} />
+        <Route exact path="/new-game" element={<NewGame />} />
         <Route exact path="/previous-games" element={<PreviousGames />} />
         <Route exact path="/leaderboard" element={<Leaderboard />} />
         <Route exact path="/manual" element={<Manual />} />

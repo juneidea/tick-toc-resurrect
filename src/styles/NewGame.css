@@ -131,11 +131,13 @@
   color: #f90404;
   text-shadow: 0px 0px 4px #f90404;
   cursor: pointer;
+  user-select: none;
 }
 
 .strikes--inactive {
   color: rgba(255, 255, 255, 0.47);
   cursor: pointer;
+  user-select: none;
 }
 
 .new-game--footer {
@@ -151,4 +153,8 @@
 
 .new-game--footer a:hover {
   color: #9dd3ff;
+}
+
+.time {
+  user-select: none;
 }
