@@ -5,9 +5,8 @@ module.exports = router
 router.post('/login', async (req, res, next) => {
   try {
     const {userName} = req.body
-    const user = await User.findOne({where: {userName}})
+    let user = await User.findOne({where: {userName}})
     if (!user) {
-      console.log('NO USERNAME', userName)
       user = await User.create({userName})
       req.login(user, err => (err ? next(err) : res.json(user)))
     } else {

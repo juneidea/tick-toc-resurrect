@@ -4,11 +4,13 @@ module.exports = router
 
 router.get('/', async (req, res, next) => {
   try {
+    const limit = 5
     const games = await Game.findAll({
       where: {
         status: 'diffused'
       },
       include: [User],
+      limit,
       order: [['solveTime', 'ASC']]
     })
     res.json({games})
@@ -46,9 +48,8 @@ router.post('/', async (req, res, next) => {
 
 router.get('/previous', async (req, res, next) => {
   try {
-    const limit = 50
-    // const userId = req.session.passport.user
-    const userId = 1
+    const limit = 30
+    const userId = req.session.passport.user
     const games = await Game.findAll({
       where: {
         userId

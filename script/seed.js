@@ -33,13 +33,25 @@ const gameData = [
     strikesAllowed: 3,
     strikeCount: 2,
     status: 'failed'
-  }
+  },
+  {
+    moduleTotal: 5,
+    modulesFailed: 1,
+    startTime: 300,
+    finishTime: 121,
+    solveTime: 179,
+    strikesAllowed: 3,
+    strikeCount: 1,
+    status: 'diffused'
+  },
 ]
 
 const userData = [
   {
     userName: 'dummyUser',
-    password: 'dummyPassword'
+  },
+  {
+    userName: 'juneidea'
   }
 ]
 
@@ -52,12 +64,13 @@ async function seed() {
     User.bulkCreate(userData, {individualHooks: true, returning: true})
   ])
 
-  const [game1, game2, game3] = game
-  const [user1] = user
+  const [game1, game2, game3, game4] = game
+  const [user1, user2] = user
 
   await game1.setUser(user1)
   await game2.setUser(user1)
   await game3.setUser(user1)
+  await game4.setUser(user2)
 
   console.log(`seeded ${user.length} users`)
   console.log(`seeded successfully`)

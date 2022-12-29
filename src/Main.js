@@ -1,12 +1,14 @@
 import React from 'react'
-import './styles/Main.css'
 import {Link} from 'react-router-dom'
 
-const Main = () => {
+import history from './history'
+import './styles/Main.css'
+
+const Main = ({ setUserName }) => {
   const handleClick = (event) => {
     event.preventDefault()
-    // this.props.resetGame()
-    // this.props.logout()
+    setUserName(undefined)
+    history.push('/')
   }
   return (
     <div className="main-container">
@@ -35,12 +37,5 @@ const Main = () => {
     </div>
   )
 }
-
-// const mapDispatch = dispatch => {
-//   return {
-//     logout: () => dispatch(logout()),
-//     resetGame: () => dispatch(resetGame())
-//   }
-// }
 
 export default Main

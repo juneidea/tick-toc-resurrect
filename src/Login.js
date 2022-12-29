@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
+import history from './history'
 import './styles/Login.css'
 
-const Login = () => {
-  const [userName, setUserName] = useState('')
-  const [userId, setUserId] = useState()
+const Login = ({setUserName}) => {
+  const [playerName, setPlayerName] = useState('')
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -15,21 +15,17 @@ const Login = () => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({userName})
+      body: JSON.stringify({userName: playerName})
     }).then((res) => res.json()).then((data) => {
-      setUserId(data)
+      setUserName(data.userName)
+      history.push('/')
     })
   }
 
   const handleChange = event => {
-    setUserName(event.target.value)
+    setPlayerName(event.target.value)
   }
 
-  // const {user} = this.props
-  // let error = user.error ? user.error.response.data : ''
-  // let errorMessage = user.error
-  //   ? user.error.response.data.split('-').join(' ')
-  //   : ''
   return (
     <>
         <div className="login-form-container">
@@ -38,21 +34,14 @@ const Login = () => {
               <div className="login-fields-container">
                 <div className="login-field-labels">
                   <div>playername</div>
-                  <div>{userId}</div>
                 </div>
                 <div className="login-fields">
                   <input
                     required
                     name="username"
-                    // className={
-                    //   error.includes('username') ? `${error}--error` : ''
-                    // }
                     onChange={handleChange}
-                    value={userName}
+                    value={playerName}
                   />
-                  {/* {error && (
-                    <div className={`${error}--message`}>{errorMessage}</div>
-                  )} */}
                 </div>
               </div>
               <button className="button2 login-signup--button" type="submit">

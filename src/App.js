@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react'
+import React, { useState } from 'react'
 import {Routes, Route, Navigate} from 'react-router-dom'
 
 import './styles/App.css'
@@ -6,34 +6,36 @@ import './styles/Loader.css'
 import Login from './Login'
 import Main from './Main'
 import PreviousGames from './PreviousGames'
+import Leaderboard from './Leaderboard'
+import Manual from './Manual'
 import Footer from './Footer'
-
-const UserContext = createContext(null)
 
 const App = () => {
   const pathname = window.location.pathname
-  const [userId, setUserId] = useState(false)
+  const [userName, setUserName] = useState()
   return (
-    <UserContext.Provider value={userId}>
+    <>
       {pathname !== '/diffusing' &&
           pathname !== '/manual' && <div className="title">TICK-TOC</div>}
-      <button onClick={() => setUserId(!userId)} >USER ID</button>
-      {userId ? (      
+      {userName && <button>USER: {userName}</button>}
+      {userName ? (      
       <Routes>
-        <Route exact path="/" element={<Main />} />
+        <Route exact path="/" element={<Main setUserName={setUserName} />} />
         <Route exact path="/previous-games" element={<PreviousGames />} />
+        <Route exact path="/leaderboard" element={<Leaderboard />} />
+        <Route exact path="/manual" element={<Manual />} />
         <Route render={() => <Navigate to="/" />} />
       </Routes>) : (
       <Routes>
-        {/* <Route exact path="/manual" component={Manual} /> */}
-        <Route exact path="/" element={<Login />} />
+        <Route exact path="/" element={<Login setUserName={setUserName} />} />
+        <Route exact path="/manual" element={<Manual />} />
         <Route render={() => <Navigate to="/" />} />
       </Routes>
       )}
       {pathname !== '/diffusing' &&
           pathname !== '/manual' &&
           pathname !== '/new-game' && <Footer />}
-    </UserContext.Provider>
+    </>
   )
 }
 
