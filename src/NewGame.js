@@ -7,17 +7,12 @@ import {
 
 import './styles/NewGame.css'
 
-const NewGame = () => {
+const NewGame = ({ setGameProps }) => {
   const [startTime, setStartTime] = useState(300)
   const [strikesAllowed, setStrikesAllowed] = useState(true)
 
   const handleStart = () => {
-    // const {startTime, strikesAllowed} = this.state
-    // this.props.startGame({
-    //   startTime,
-    //   strikesAllowed
-    // })
-    // this.props.history.push('/diffusing')
+    setGameProps({ gameStarted: true, startTime, strikesAllowed })
   }
 
   const handleTime = char => {
@@ -86,9 +81,11 @@ const NewGame = () => {
                   BACK
                 </button>
               </Link>
-              <div className="new-game--start" onClick={handleStart}>
-                START
-              </div>
+              <Link to="/diffusing">
+                <div className="new-game--start" onClick={handleStart}>
+                  START
+                </div>
+              </Link>
             </div>
           </div>
         </div>

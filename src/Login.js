@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import history from './history'
 import './styles/Login.css'
 
-const Login = ({setUserName}) => {
+const Login = ({ setUserName }) => {
   const [playerName, setPlayerName] = useState('')
 
   const handleSubmit = event => {
@@ -17,8 +16,8 @@ const Login = ({setUserName}) => {
       },
       body: JSON.stringify({userName: playerName})
     }).then((res) => res.json()).then((data) => {
+      sessionStorage.setItem("playername", data.userName);
       setUserName(data.userName)
-      history.push('/')
     })
   }
 

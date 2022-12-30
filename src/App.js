@@ -10,10 +10,12 @@ import PreviousGames from './PreviousGames'
 import Leaderboard from './Leaderboard'
 import Manual from './Manual'
 import Footer from './Footer'
+import ProtectedBomb from './ProtectedBomb'
 
 const App = () => {
   const pathname = window.location.pathname
-  const [userName, setUserName] = useState()
+  const [userName, setUserName] = useState(sessionStorage.getItem("playername"))
+  const [gameProps, setGameProps] = useState({ gameStarted: false })
   return (
     <>
       {pathname !== '/diffusing' &&
@@ -22,9 +24,10 @@ const App = () => {
       {userName ? (      
       <Routes>
         <Route exact path="/" element={<Main setUserName={setUserName} />} />
-        <Route exact path="/new-game" element={<NewGame />} />
+        <Route exact path="/new-game" element={<NewGame setGameProps={setGameProps} />} />
         <Route exact path="/previous-games" element={<PreviousGames />} />
         <Route exact path="/leaderboard" element={<Leaderboard />} />
+        <Route exact path="/diffusing" element={<ProtectedBomb {...gameProps} />} />
         <Route exact path="/manual" element={<Manual />} />
         <Route render={() => <Navigate to="/" />} />
       </Routes>) : (

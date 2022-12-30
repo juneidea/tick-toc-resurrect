@@ -1,14 +1,13 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 
-import history from './history'
 import './styles/Main.css'
 
 const Main = ({ setUserName }) => {
   const handleClick = (event) => {
     event.preventDefault()
+    sessionStorage.removeItem("playername")
     setUserName(undefined)
-    history.push('/')
   }
   return (
     <div className="main-container">
