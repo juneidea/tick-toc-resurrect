@@ -10,7 +10,7 @@ import PreviousGames from './PreviousGames'
 import Leaderboard from './Leaderboard'
 import Manual from './Manual'
 import Footer from './Footer'
-import ProtectedBomb from './ProtectedBomb'
+import Bomb from './Bomb/Bomb'
 
 const App = () => {
   const pathname = window.location.pathname
@@ -27,7 +27,7 @@ const App = () => {
         <Route exact path="/new-game" element={<NewGame setGameProps={setGameProps} />} />
         <Route exact path="/previous-games" element={<PreviousGames />} />
         <Route exact path="/leaderboard" element={<Leaderboard />} />
-        <Route exact path="/diffusing" element={<ProtectedBomb {...gameProps} />} />
+        <Route exact path="/diffusing" element={gameProps.gameStarted ? <Bomb {...gameProps} /> : <NewGame setGameProps={setGameProps} />} />
         <Route exact path="/manual" element={<Manual />} />
         <Route render={() => <Navigate to="/" />} />
       </Routes>) : (
