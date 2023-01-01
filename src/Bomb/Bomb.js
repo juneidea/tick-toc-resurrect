@@ -1,5 +1,6 @@
-import React, { useState, useEffect} from 'react'
+import React, { useRef, useState, useEffect} from 'react'
 import {FaCog} from 'react-icons/fa'
+import * as THREE from 'three'
 
 import './../styles/Bomb.css'
 import './../styles/Banner.css'
@@ -17,11 +18,18 @@ const Bomb = ({ startTime, strikesAllowed }) => {
     activated: true
   })
 
+  const mount = useRef(null)
+
   useEffect(() => {
-    const canvas = new BombClass('tick-toc')
-    canvas.initialize()
-    canvas.animate()
+    const renderer = new THREE.WebGLRenderer({ antialias: true })
     
+    const canvas = new BombClass(mount.current)
+    canvas.initialize(renderer)
+    canvas.animate()
+
+    return () => {
+      canvas.stop()
+    }
   }, [])
 
   const gameStatus = 'pending'
@@ -39,9 +47,10 @@ const Bomb = ({ startTime, strikesAllowed }) => {
           <FaCog className="loader" />
         </div>
       )}
-      <div className={activated ? 'bomb--activated' : 'bomb--activating'}>
-        <canvas id="tick-toc" />
-      </div>
+      <div
+        className={activated ? 'bomb--activated' : 'bomb--activating'}
+        ref={mount}
+      />
     </>
   )
 }
