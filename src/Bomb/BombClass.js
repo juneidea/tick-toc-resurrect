@@ -1,12 +1,12 @@
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 import Lights from './Lights'
 import BoxLoader from './Box'
 
 export default class BombClass {
-    constructor(mount) {
+    constructor(mount, state) {
         this.mount = mount
+        this.state = state
         this.scene = new THREE.Scene()
         this.camera = new THREE.PerspectiveCamera(
             36,
@@ -26,12 +26,13 @@ export default class BombClass {
 
         this.scene.add(new THREE.AmbientLight(0x505050))
     
-        const lights = new Lights(this.scene, GLTFLoader)
+        const lights = new Lights(this.scene)
         lights.setup()
 
-        const boxLoader = new BoxLoader(this.scene, GLTFLoader)
+        const boxLoader = new BoxLoader(this.scene, this.state)
         boxLoader.setup()
         this.box  = boxLoader.box
+        this.clock = boxLoader.clock
 
         this.renderer.shadowMap.enabled = true
         this.renderer.setPixelRatio(window.devicePixelRatio)

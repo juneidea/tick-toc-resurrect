@@ -23,14 +23,14 @@ const Bomb = ({ startTime, strikesAllowed }) => {
   useEffect(() => {
     const renderer = new THREE.WebGLRenderer({ antialias: true })
     
-    const canvas = new BombClass(mount.current)
+    const canvas = new BombClass(mount.current, state)
     canvas.initialize(renderer)
     canvas.animate()
 
     return () => {
       canvas.stop()
     }
-  }, [])
+  }, [state])
 
   const gameStatus = 'pending'
   const {activated} = state
