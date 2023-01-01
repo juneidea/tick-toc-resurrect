@@ -1,20 +1,5 @@
-/* eslint-disable radix */
-/* eslint-disable complexity */
-/* eslint-disable max-statements */
-
 import React, { useState, useEffect} from 'react'
 import {FaCog} from 'react-icons/fa'
-// import * as THREE from 'three'
-// import GLTFLoader from 'three-gltf-loader'
-// import {wireCount, wireCountCases} from './modules/wires'
-// import {clockCases} from './modules/clock'
-// import * as util from './modules/util'
-// import {LEDcreate, ranPos} from './modules/LED'
-// import {CEDcreate} from './modules/CED'
-// import {generateRandomIndex, sortByKey} from '../util'
-// import {CanMove, mazeCases, randomProperty} from './modules/mod4'
-// import {SEDS} from './modules/bigbutton'
-// const selectedMazeCase = randomProperty(mazeCases)
 
 import './../styles/Bomb.css'
 import './../styles/Banner.css'
@@ -35,6 +20,8 @@ const Bomb = ({ startTime, strikesAllowed }) => {
   useEffect(() => {
     const canvas = new BombClass('tick-toc')
     canvas.initialize()
+    canvas.animate()
+    
   }, [])
 
   const gameStatus = 'pending'
@@ -53,7 +40,7 @@ const Bomb = ({ startTime, strikesAllowed }) => {
         </div>
       )}
       <div className={activated ? 'bomb--activated' : 'bomb--activating'}>
-        <canvas id="tick-toc"></canvas>
+        <canvas id="tick-toc" />
       </div>
     </>
   )

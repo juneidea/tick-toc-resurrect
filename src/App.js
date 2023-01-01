@@ -20,7 +20,7 @@ const App = () => {
     <>
       {pathname !== '/diffusing' &&
           pathname !== '/manual' && <div className="title">TICK-TOC</div>}
-      {userName && <button>USER: {userName}</button>}
+      {/* {userName && <button>USER: {userName}</button>} */}
       {userName ? (      
       <Routes>
         <Route exact path="/" element={<Main setUserName={setUserName} />} />
