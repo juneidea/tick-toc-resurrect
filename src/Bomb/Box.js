@@ -1,11 +1,15 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {clockCases} from './modules/clock'
+import {wireCount, wireCountCases} from './modules/wires'
+import {LEDcreate} from './modules/LED'
+import {SEDS} from './modules/bigbutton'
+
 import * as util from './modules/util'
-import {sortByKey} from '../util'
+import {generateRandomIndex, sortByKey} from '../util'
 
 export default class BoxLoader {
-    constructor(scene, state) {
+    constructor(scene, state, targetList) {
         this.boxLoader = new GLTFLoader()
         this.clockLoader = new GLTFLoader()
         this.digitalLoader = new GLTFLoader()
@@ -13,10 +17,16 @@ export default class BoxLoader {
         this.serialText = new THREE.TextureLoader().load(`/models/serial.png`)
         this.serialLoader = new GLTFLoader()
         this.parallelLoader = new GLTFLoader()
+        this.module1Loader = new GLTFLoader()
+        this.module2Loader = new GLTFLoader()
+        this.module3Loader = new GLTFLoader()
+        this.module4Loader = new GLTFLoader()
+        this.module5Loader = new GLTFLoader()
         this.box = undefined
         this.clock = undefined
         this.scene = scene
         this.state = state
+        this.targetList = targetList
     }
 
     setup() {
@@ -56,7 +66,8 @@ export default class BoxLoader {
             this.box.audio3.appendChild(source3)
         })
     }
-
+    
+    // box children 2
     initClock() {
         this.clockLoader.load('models/clock.glb', clock => {
           this.clock = clock.scene
@@ -132,6 +143,7 @@ export default class BoxLoader {
           })
     }
 
+    // box children 3-6
     initInfo() {
         this.batteryLoader.load('models/batterry.glb', battery => {
           this.battery1 = battery.scene
@@ -201,6 +213,155 @@ export default class BoxLoader {
           this.parallel.castShadow = true
           this.parallel.receiveShadow = true
         })
-        // this.initModules()
-      }
+        this.initModule1()
+    }
+
+    initModule1() {
+        this.module1Loader.load('models/mo1.glb', gltf => {
+            this.module1 = gltf.scene
+            this.box.add(this.module1)
+            this.module1.scale.set(0.42, 0.42, 0.42)
+            this.module1.position.x = -0.49 //Position (x = right+ left-)
+            this.module1.position.y = -0.31 //Position (y = up+, down-)
+            this.module1.position.z = -0.47 //Position (z = front +, back-)
+            this.module1.rotation.z = Math.PI / 2
+            this.module1.rotation.y = -Math.PI / 2
+    
+            let count = parseInt(
+              wireCount[Math.floor(Math.random() * wireCount.length)]
+            )
+            let wireCases = wireCountCases[count]
+            let wireCase = wireCases[generateRandomIndex(wireCases.length)]
+            let wires = this.module1.children.filter(element =>
+              element.name.startsWith('Wire')
+            )
+            let uncutWires = wires
+              .filter(wire => !wire.name.endsWith('Cut'))
+              .sort((a, b) => sortByKey(a, b, 'name'))
+            let cutWires = wires
+              .filter(wire => wire.name.endsWith('Cut'))
+              .sort((a, b) => sortByKey(a, b, 'name'))
+            while (cutWires.length > count) {
+              let wireIndex = generateRandomIndex(cutWires.length)
+              this.module1.remove(cutWires[wireIndex])
+              this.module1.remove(uncutWires[wireIndex])
+              cutWires = cutWires.filter((wire, index) => index !== wireIndex)
+              uncutWires = uncutWires.filter((wire, index) => index !== wireIndex)
+            }
+    
+            uncutWires.forEach((wire, index) => {
+              wire.material = wireCase.colors[index]
+              cutWires[index].material = wireCase.colors[index]
+              if (wireCase.correct === index) {
+                wire.userData = {correct: true}
+              } else {
+                wire.userData = {correct: false}
+              }
+              this.targetList.push(wire)
+            })
+    
+            this.module1.traverse(o => {
+              if (o.isMesh) {
+                if (o.name === 'Cube001') o.material = util.cubeMaterial
+                else if (o.name === 'Socket') o.material = util.socketMaterial
+                else if (o.name === 'LED') LEDcreate(o, this.module1, 'glow')
+                else if (!o.name.includes('Wire')) o.material = util.defaultMaterial
+              }
+            })
+            this.module1.castShadow = true
+            this.module1.receiveShadow = true
+            this.module1.audio = document.createElement('audio')
+            let source = document.createElement('source')
+            source.src = '/models/sound/wipe.mp3'
+            this.module1.audio.appendChild(source)
+        })
+        this.initModule2()
+    }
+
+    initModule2() {
+        this.module2Loader.load('models/mo2.glb', glft => {
+            this.module2 = glft.scene
+            this.box.add(this.module2)
+            this.module2.scale.set(0.42, 0.42, 0.42)
+            this.module2.position.x = 1.45 //Position (x = right+ left-)
+            this.module2.position.y = -0.31 //Position (y = up+, down-)
+            this.module2.position.z = -0.47 //Position (z = front +, back-)
+            this.module2.rotation.z = Math.PI / 2
+            this.module2.rotation.y = -Math.PI / 2
+    
+            let buttonIndex = String(generateRandomIndex(4) + 1)
+    
+            this.SEDIndex = generateRandomIndex(4)
+    
+            let texture = new THREE.TextureLoader().load(
+              `/models/Button${buttonIndex}.png`
+            )
+            texture.wrapS = THREE.RepeatWrapping
+            texture.repeat.x = -1
+    
+            this.module2.traverse(o => {
+              if (o.isMesh) {
+                if (
+                  o.name === 'Cube' ||
+                  o.name === 'Cylinder' ||
+                  o.name === 'LEDbase' ||
+                  o.name === 'Button001'
+                )
+                  o.material = util.defaultMaterial
+                else if (o.name === 'Cube001') o.material = util.cubeMaterial
+                else if (o.name === 'Button002' || o.name === 'Button') {
+                  o.material = new THREE.MeshPhongMaterial({map: texture})
+                  o.rotation.x = -2.85
+                  if (buttonIndex === '1' || buttonIndex === '2') {
+                    o.userData = {
+                      hold: false
+                    }
+                  } else {
+                    o.userData = {
+                      hold: true
+                    }
+                  }
+                  this.targetList.push(o)
+                } else if (o.name === 'LED') LEDcreate(o, this.module2, 'glow')
+                else if (o.name === 'Cube002') {
+                  let em = new THREE.Color(0x000000)
+                  let SED1 = SEDS[this.SEDIndex].color
+                  SED1.name = 'LEDstripe1'
+                  this.module2.add(SED1)
+                  SED1.position.copy(o.position)
+                  SED1.position.z -= 0.9
+                  SED1.position.x -= 0.8
+                  SED1.position.y += 0.1
+                  let SED2 = SED1.clone()
+                  SED2.name = 'LEDstripe2'
+                  SED2.position.y -= 0.25
+                  this.module2.add(SED2)
+                  let SED3 = SED1.clone()
+                  SED3.name = 'LEDstripe3'
+                  SED3.position.y -= 0.5
+                  this.module2.add(SED3)
+                  let SED4 = SED1.clone()
+                  SED4.name = 'LEDstripe4'
+                  SED4.position.y -= 0.75
+                  this.module2.add(SED4)
+                  o.material = new THREE.MeshPhongMaterial({
+                    transparent: true,
+                    opacity: 0.9,
+                    emissive: em,
+                    color: SED1.color,
+                    shininess: 500
+                  })
+                } else {
+                  o.material = util.defaultMaterial
+                }
+              }
+              this.module2.castShadow = true
+              this.module2.receiveShadow = true
+            })
+            this.module2.audio = document.createElement('audio')
+            let source = document.createElement('source')
+            source.src = '/models/sound/bigButton.mp3'
+            this.module2.audio.appendChild(source)
+        })
+    }
 }

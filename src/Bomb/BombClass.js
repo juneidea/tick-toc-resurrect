@@ -30,7 +30,7 @@ export default class BombClass {
         const lights = new Lights(this.scene)
         lights.setup()
 
-        const boxLoader = new BoxLoader(this.scene, this.state)
+        const boxLoader = new BoxLoader(this.scene, this.state, this.targetList)
         boxLoader.setup()
 
         this.renderer.shadowMap.enabled = true
@@ -97,8 +97,12 @@ export default class BombClass {
     }
 
     handleCountStart() {
+        // reference to 3d models after loading
         this.box = this.scene.children[3]
         this.clock = this.box.children[2]
+        this.module1 = this.box.children[8]
+        this.module2 = this.box.children[7]
+        // then start the clock
         this.timer = setInterval(() => {
             if(this.state.count < 1) clearInterval(this.timer)
             if(this.state.count < 1) clearInterval(this.lastMin)
