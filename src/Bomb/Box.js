@@ -14,6 +14,7 @@ export default class BoxLoader {
         this.serialLoader = new GLTFLoader()
         this.parallelLoader = new GLTFLoader()
         this.box = undefined
+        this.clock = undefined
         this.scene = scene
         this.state = state
     }
@@ -56,7 +57,7 @@ export default class BoxLoader {
         })
     }
 
-    initClock = () => {
+    initClock() {
         this.clockLoader.load('models/clock.glb', clock => {
           this.clock = clock.scene
           this.box.add(this.clock)
@@ -87,7 +88,7 @@ export default class BoxLoader {
         this.box.audio.appendChild(source)
     }
 
-    initDigital = () => {
+    initDigital() {
         if (this.clock) {
           this.digitalLoader.load('models/digital.glb', digital => {
             this.digital = digital.scene
@@ -112,7 +113,7 @@ export default class BoxLoader {
         }
     }
 
-    calcInitialClock = () => {
+    calcInitialClock() {
         const {count, singleSecond} = this.state
         const minute = Math.floor(count / 60)
         const seconds = count % 60
@@ -122,16 +123,16 @@ export default class BoxLoader {
         this.setClock('3', singleSecond)
     }
 
-    setClock = (position, time) => {
+    setClock(position, time) {
         this.clock.children[6].children
           .filter(child => child.name.startsWith(`D${position}`))
           .sort((a, b) => sortByKey(a, b, 'name'))
           .forEach((mark, index) => {
             mark.visible = clockCases[String(time)][index]
           })
-      }
+    }
 
-    initInfo = () => {
+    initInfo() {
         this.batteryLoader.load('models/batterry.glb', battery => {
           this.battery1 = battery.scene
           this.box.add(this.battery1)
