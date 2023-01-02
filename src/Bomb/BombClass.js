@@ -39,17 +39,72 @@ export default class BombClass {
         this.mount.appendChild(this.renderer.domElement)
         window.addEventListener('resize', this.onWindowResize(this.camera), false)
 
+        // Mouse rotate box
+        this.isDragging = false
+
+        this.toRadians = angle => {
+          return angle * (Math.PI / 180)
+        }
+    
+        this.toDegress = angle => {
+          return angle * (180 / Math.PI)
+        }
+    
+        this.mouse = {
+          x: 0,
+          y: 0
+        }
+    
+        this.previousMousePosition = {
+          x: 0,
+          y: 0
+        }
+    
+        this.renderArea = this.renderer.domElement
+    
+        this.renderArea.addEventListener('mousedown', e => {
+          this.isDragging = true
+        })
+    
+        this.renderArea.addEventListener('mousemove', e => {
+          let deltaMove = {
+            x: e.offsetX - this.previousMousePosition.x,
+            y: e.offsetY - this.previousMousePosition.y
+          }
+    
+          if (this.isDragging) {
+            let deltaRotationQuaternion = new THREE.Quaternion().setFromEuler(
+              new THREE.Euler(this.toRadians(deltaMove.y * 1), 0, 0, 'XYZ')
+            )
+            this.box.quaternion.multiplyQuaternions(
+              deltaRotationQuaternion,
+              this.box.quaternion
+            )
+          }
+    
+          this.previousMousePosition = {
+            x: e.offsetX,
+            y: e.offsetY
+          }
+        })
+
+        document.addEventListener('mouseup', () => {
+            this.isDragging = false
+        })
+
         // this.projector = new THREE.Projector()
         this.start()
     }
 
     handleCountStart() {
+        this.box = this.scene.children[3]
+        this.clock = this.box.children[2]
         this.timer = setInterval(() => {
             if(this.state.count < 1) clearInterval(this.timer)
             if(this.state.count < 1) clearInterval(this.lastMin)
             const newCount = this.state.count - 1
             this.setState({count: newCount >= 0 ? newCount : 0})
-            if (this.scene.children[3].children[2].children[6]) this.calcClock(this.state)
+            if (this.clock.children[6]) this.calcClock(this.state)
         }, 1000)
     }
 
@@ -87,7 +142,7 @@ export default class BombClass {
     }
 
     setClock = (position, time) => {
-        this.scene.children[3].children[2].children[6].children
+        this.clock.children[6].children
           .filter(child => child.name.startsWith(`D${position}`))
           .sort((a, b) => sortByKey(a, b, 'name'))
           .forEach((mark, index) => {
