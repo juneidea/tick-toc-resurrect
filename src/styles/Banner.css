@@ -19,11 +19,11 @@
   font-size: 4rem;
   padding: 0.25rem 1rem;
   font-family: 'Courier';
-  mask-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/8399/grunge.png');
+  /* mask-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/8399/grunge.png'); */
   /* mask-size: 944px 604px; */
-  -webkit-mask-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/8399/grunge.png');
+  /* -webkit-mask-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/8399/grunge.png'); */
   /* -webkit-mask-size: 944px 604px; */
-  mix-blend-mode: multiply;
+  /* mix-blend-mode: multiply; */
 }
 
 .failed--banner,

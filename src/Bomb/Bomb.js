@@ -15,9 +15,8 @@ const Bomb = ({ startTime, strikesAllowed }) => {
     minute: 0,
     tenSecond: 0,
     singleSecond: 0,
-    activated: true
   })
-
+  const [activated, setActivated] = useState(false)
   const mount = useRef(null)
 
   useEffect(() => {
@@ -26,6 +25,10 @@ const Bomb = ({ startTime, strikesAllowed }) => {
     const canvas = new BombClass(mount.current, state)
     canvas.initialize(renderer)
     canvas.animate()
+    setTimeout(() => {
+      canvas.handleCountStart()
+      setActivated(true)
+    }, 1000)
 
     return () => {
       canvas.stop()
@@ -33,7 +36,6 @@ const Bomb = ({ startTime, strikesAllowed }) => {
   }, [state])
 
   const gameStatus = 'pending'
-  const {activated} = state
   return (
     <>
       {gameStatus !== 'pending' && (

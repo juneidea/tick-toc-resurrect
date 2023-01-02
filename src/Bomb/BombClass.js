@@ -25,7 +25,6 @@ export default class BombClass {
     initialize(renderer) {
         this.renderer = renderer
         this.camera.position.set(0, 1.8, 4)
-
         this.scene.add(new THREE.AmbientLight(0x505050))
     
         const lights = new Lights(this.scene)
@@ -38,11 +37,10 @@ export default class BombClass {
         this.renderer.setPixelRatio(window.devicePixelRatio)
         this.renderer.setSize(window.innerWidth, window.innerHeight)
         this.mount.appendChild(this.renderer.domElement)
-        window.addEventListener('resize', this.onWindowResize, false)
+        window.addEventListener('resize', this.onWindowResize(this.camera), false)
 
         // this.projector = new THREE.Projector()
         this.start()
-        this.handleCountStart()
     }
 
     handleCountStart() {
@@ -109,9 +107,9 @@ export default class BombClass {
         this.mount.removeChild(this.renderer.domElement)
     }
 
-    onWindowResize() {
-        this.camera.aspect = window.innerWidth / window.innerHeight
-        this.camera.updateProjectionMatrix()
+    onWindowResize(camera) {
+        camera.aspect = window.innerWidth / window.innerHeight
+        camera.updateProjectionMatrix()
         this.renderer.setSize(window.innerWidth, window.innerHeight)
     }
 
