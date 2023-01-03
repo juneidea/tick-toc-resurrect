@@ -112,19 +112,17 @@ export default class BombClass {
               ) {
                 if (this.intersects[0].object.userData.hold === true) {
                   if (
-                    minute === SEDS[this.SEDIndex].num ||
-                    tenSecond === SEDS[this.SEDIndex].num ||
-                    singleSecond === SEDS[this.SEDIndex].num
+                    minute === SEDS[this.module2.SEDIndex].num ||
+                    tenSecond === SEDS[this.module2.SEDIndex].num ||
+                    singleSecond === SEDS[this.module2.SEDIndex].num
                   ) {
-                    this.props.passModule('BigButton')
                     this.handlePass('module2')
                     this.removeAllTargets('Button')
                   } else {
                     this.box.audio.play()
-                    this.props.setStrike()
+                    this.setStrike()
                   }
                 } else {
-                  this.props.passModule('BigButton')
                   this.handlePass('module2')
                   this.removeAllTargets('Button')
                 }
@@ -227,35 +225,40 @@ export default class BombClass {
 
     // Game handles
 
-    handleWires = wire => {
+    handleWires(wire) {
         this.module1.audio.play()
         if (wire.userData.correct === true) {
-          this.props.passModule('Wires')
           this.handlePass('module1')
+          this.removeAllTargets('Wire')
         } else {
           this.box.audio.play()
-          this.props.setStrike()
+          this.setStrike()
         }
         this.module1.remove(wire)
         this.removeTarget(wire)
     }
 
-    handlePass = moduleName => {
+    handlePass(moduleName) {
         this.box.audio1.play()
         const glow = this[moduleName].children.find(child => child.name === 'glow')
         const LED = this[moduleName].children.find(child => child.name === 'LED')
         glow.visible = true
         LED.material = util.LEDMaterialON
+        this.state.modulesPassed += 1
     }
     
-    removeTarget = target => {
+    removeTarget(target) {
         this.targetList = this.targetList.filter(item => item !== target)
     }
     
-    removeAllTargets = target => {
+    removeAllTargets(target) {
         this.targetList = this.targetList.filter(
           item => !item.name.includes(target)
         )
+    }
+
+    setStrike() {
+      this.state.strikeCount += 1
     }
 
 
@@ -287,7 +290,6 @@ export default class BombClass {
         // if there is one (or more) intersections
         if (this.intersects.length > 0) {
           let itemClicked = this.intersects[0].object
-          console.log(this.targetList)
           if (this.targetList.includes(itemClicked)) {
             let {name} = itemClicked
             if (name.startsWith('Wire')) {

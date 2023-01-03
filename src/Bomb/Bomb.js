@@ -15,6 +15,9 @@ const Bomb = ({ startTime, strikesAllowed }) => {
     minute: 0,
     tenSecond: 0,
     singleSecond: 0,
+    strikeCount: 0,
+    modulesPassed: 0,
+    gameStatus: 'pending',
   })
   const [activated, setActivated] = useState(false)
   const mount = useRef(null)

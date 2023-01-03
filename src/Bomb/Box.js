@@ -293,7 +293,7 @@ export default class BoxLoader {
     
             let buttonIndex = String(generateRandomIndex(4) + 1)
     
-            this.SEDIndex = generateRandomIndex(4)
+            this.module2.SEDIndex = generateRandomIndex(4)
     
             let texture = new THREE.TextureLoader().load(
               `/models/Button${buttonIndex}.png`
@@ -315,6 +315,7 @@ export default class BoxLoader {
                   o.material = new THREE.MeshPhongMaterial({map: texture})
                   o.rotation.x = -2.85
                   if (buttonIndex === '1' || buttonIndex === '2') {
+                    
                     o.userData = {
                       hold: false
                     }
@@ -327,7 +328,7 @@ export default class BoxLoader {
                 } else if (o.name === 'LED') LEDcreate(o, this.module2, 'glow')
                 else if (o.name === 'Cube002') {
                   let em = new THREE.Color(0x000000)
-                  let SED1 = SEDS[this.SEDIndex].color
+                  let SED1 = SEDS[this.module2.SEDIndex].color
                   SED1.name = 'LEDstripe1'
                   this.module2.add(SED1)
                   SED1.position.copy(o.position)
@@ -366,4 +367,5 @@ export default class BoxLoader {
             this.module2.audio.appendChild(source)
         })
     }
+
 }
