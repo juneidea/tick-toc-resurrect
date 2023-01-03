@@ -146,6 +146,7 @@ export default class BombClass {
         this.clock = this.box.children[2]
         this.module1 = this.box.children[7]
         this.module2 = this.box.children[8]
+        this.module3 = this.box.children[9]
         // then start the clock
         this.timer = setInterval(() => {
             if(this.state.count < 1) clearInterval(this.timer)
@@ -245,6 +246,7 @@ export default class BombClass {
         glow.visible = true
         LED.material = util.LEDMaterialON
         this.state.modulesPassed += 1
+        console.log(this.state.modulesPassed)
     }
     
     removeTarget(target) {
@@ -259,6 +261,12 @@ export default class BombClass {
 
     setStrike() {
       this.state.strikeCount += 1
+      if (this.state.strikeTotal > 1 && this.state.strikeCount < 3) {
+        const Strike = this.clock.children.find(
+          child => child.name === `Strike${this.state.strikeCount}`
+        )
+        Strike.visible = true
+      }
     }
 
 
@@ -303,63 +311,65 @@ export default class BombClass {
                 })
             }
             // module3
-            // if (name.startsWith('Letter') || name.startsWith('Lface')) {
-            //   if (
-            //     this.intersects[0].object.material.map.image.src.slice(-6, -5) !==
-            //     'p'
-            //   ) {
-            //     if (
-            //       this.module3.pickFour[0] ===
-            //       Number(
-            //         this.intersects[0].object.material.map.image.src.slice(-6, -5) +
-            //           this.intersects[0].object.material.map.image.src.slice(-5, -4)
-            //       )
-            //     ) {
-            //       this.module3.audio.play()
-            //       this.module3.children
-            //         .filter(a =>
-            //           a.name.includes('' + this.intersects[0].object.name.slice(-1))
-            //         )
-            //         .map(b => {
-            //           if (b.position.x > 1.26) b.position.x -= 0.07
-            //           if (b.position.x < 0.5 && b.position.x > 0.35) {
-            //             b.position.x -= 0.07
-            //             b.material.color.setRGB(0, 1, 0)
-            //           }
-            //         })
-            //       this.removeTarget(this.intersects[0].object)
-            //       this.module3.pickFour.shift()
-            //       if (!this.module3.pickFour[0]) this.handleLetters()
-            //     } else {
-            //       this.box.audio.play()
-            //       this.props.setStrike()
-            //     }
-            //   } else if (
-            //     this.module3.pickFour[0] ===
-            //     Number(
-            //       this.intersects[0].object.material.map.image.src.slice(-5, -4)
-            //     )
-            //   ) {
-            //     this.module3.audio.play()
-            //     this.module3.children
-            //       .filter(a =>
-            //         a.name.includes('' + this.intersects[0].object.name.slice(-1))
-            //       )
-            //       .map(b => {
-            //         if (b.position.x > 1.26) b.position.x -= 0.07
-            //         if (b.position.x < 0.5 && b.position.x > 0.35) {
-            //           b.position.x -= 0.07
-            //           b.material.color.setRGB(0, 1, 0)
-            //         }
-            //       })
-            //     this.removeTarget(this.intersects[0].object)
-            //     this.module3.pickFour.shift()
-            //     if (!this.module3.pickFour[0]) this.handleLetters()
-            //   } else {
-            //     this.box.audio.play()
-            //     this.props.setStrike()
-            //   }
-            // }
+            if (name.startsWith('Letter') || name.startsWith('Lface')) {
+              if (
+                this.intersects[0].object.material.map.image.src.slice(-6, -5) !==
+                'p'
+              ) {
+                if (
+                  this.module3.pickFour[0] ===
+                  Number(
+                    this.intersects[0].object.material.map.image.src.slice(-6, -5) +
+                      this.intersects[0].object.material.map.image.src.slice(-5, -4)
+                  )
+                ) {
+                  this.module3.audio.play()
+                  this.module3.children
+                    .filter(a =>
+                      a.name.includes('' + this.intersects[0].object.name.slice(-1))
+                    )
+                    .map(b => {
+                      if (b.position.x > 1.26) b.position.x -= 0.07
+                      if (b.position.x < 0.5 && b.position.x > 0.35) {
+                        b.position.x -= 0.07
+                        b.material.color.setRGB(0, 1, 0)
+                      }
+                      return b
+                    })
+                  this.removeTarget(this.intersects[0].object)
+                  this.module3.pickFour.shift()
+                  if (!this.module3.pickFour[0]) this.handlePass('module3')
+                } else {
+                  this.box.audio.play()
+                  this.setStrike()
+                }
+              } else if (
+                this.module3.pickFour[0] ===
+                Number(
+                  this.intersects[0].object.material.map.image.src.slice(-5, -4)
+                )
+              ) {
+                this.module3.audio.play()
+                this.module3.children
+                  .filter(a =>
+                    a.name.includes('' + this.intersects[0].object.name.slice(-1))
+                  )
+                  .map(b => {
+                    if (b.position.x > 1.26) b.position.x -= 0.07
+                    if (b.position.x < 0.5 && b.position.x > 0.35) {
+                      b.position.x -= 0.07
+                      b.material.color.setRGB(0, 1, 0)
+                    }
+                    return b
+                  })
+                this.removeTarget(this.intersects[0].object)
+                this.module3.pickFour.shift()
+                if (!this.module3.pickFour[0]) this.handlePass('module3')
+              } else {
+                this.box.audio.play()
+                this.setStrike()
+              }
+            }
             // module4
             // let head = this.module4.head
     
@@ -385,7 +395,7 @@ export default class BombClass {
             //         this.module4.head = head
             //       } else {
             //         this.box.audio.play()
-            //         this.props.setStrike()
+            //         this.setStrike()
             //       }
             //     }
             //   } else if (this.intersects[0].object.name === 'GoDown') {
@@ -408,7 +418,7 @@ export default class BombClass {
             //         this.module4.head = head
             //       } else {
             //         this.box.audio.play()
-            //         this.props.setStrike()
+            //         this.setStrike()
             //       }
             //     }
             //   } else if (this.intersects[0].object.name === 'GoLeft') {
@@ -428,7 +438,7 @@ export default class BombClass {
             //         this.module4.head = head
             //       } else {
             //         this.box.audio.play()
-            //         this.props.setStrike()
+            //         this.setStrike()
             //       }
             //     }
             //   } else if (this.intersects[0].object.name === 'GoRight') {
@@ -448,7 +458,7 @@ export default class BombClass {
             //         this.module4.head = head
             //       } else {
             //         this.box.audio.play()
-            //         this.props.setStrike()
+            //         this.setStrike()
             //       }
             //     }
             //   }
@@ -558,7 +568,7 @@ export default class BombClass {
             //       reRun()
             //     } else {
             //       this.box.audio.play()
-            //       this.props.setStrike()
+            //       this.setStrike()
             //       reRun()
             //     }
             //   } else if (this.module5.correct === '6') {
@@ -597,7 +607,7 @@ export default class BombClass {
             //       reRun()
             //     } else {
             //       this.box.audio.play()
-            //       this.props.setStrike()
+            //       this.setStrike()
             //       runDown()
             //       reRun()
             //     }
@@ -650,7 +660,7 @@ export default class BombClass {
             //       reRun()
             //     } else {
             //       this.box.audio.play()
-            //       this.props.setStrike()
+            //       this.setStrike()
             //       runDown()
             //       reRun()
             //     }
@@ -696,7 +706,7 @@ export default class BombClass {
             //       reRun()
             //     } else {
             //       this.box.audio.play()
-            //       this.props.setStrike()
+            //       this.setStrike()
             //       runDown()
             //       reRun()
             //     }
@@ -761,7 +771,7 @@ export default class BombClass {
             //         .map(b => this.removeTarget(b))
             //     } else {
             //       this.box.audio.play()
-            //       this.props.setStrike()
+            //       this.setStrike()
             //       runDown()
             //       reRun()
             //     }

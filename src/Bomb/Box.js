@@ -365,7 +365,98 @@ export default class BoxLoader {
             let source = document.createElement('source')
             source.src = '/models/sound/bigButton.mp3'
             this.module2.audio.appendChild(source)
+
+            this.initModule3()
         })
+    }
+
+    initModule3() {
+      this.module3Loader.load('models/mo3.glb', gltf => {
+        this.module3 = gltf.scene
+        this.module3.pickFour = []
+        this.box.add(this.module3)
+        this.module3.scale.set(0.42, 0.42, 0.42)
+        this.module3.position.x = -0.49 //Position (x = right+ left-)
+        this.module3.position.y = -0.31 //Position (y = up+, down-)
+        this.module3.position.z = 0.47 //Position (z = front +, back-)
+        this.module3.rotation.z = Math.PI / 2
+        this.module3.rotation.y = -Math.PI / 2
+        let alphaSet = []
+        if (!alphaSet[0]) {
+          let set = Math.floor(Math.random() * 6)
+          for (let i = 1; i < 8; i++) {
+            alphaSet.push(set * 7 + i)
+          }
+        }
+        let pickFour = [],
+          idx
+        if (!pickFour[0]) {
+          for (let i = 0; i < 4; i++) {
+            idx = Math.floor(Math.random() * alphaSet.length)
+            pickFour.push(alphaSet[idx])
+            alphaSet = [...alphaSet.slice(0, idx), ...alphaSet.slice(idx + 1)]
+          }
+          this.module3.pickFour = pickFour
+        }
+
+        this.module3.traverse(o => {
+          let texture1 = new THREE.TextureLoader().load(
+            `/models/alphabets/Alp${this.module3.pickFour[0]}.png`
+          )
+          texture1.wrapT = THREE.RepeatWrapping
+          texture1.repeat.y = -1
+          var texture2 = new THREE.TextureLoader().load(
+            `/models/alphabets/Alp${this.module3.pickFour[1]}.png`
+          )
+          texture2.wrapT = THREE.RepeatWrapping
+          texture2.repeat.y = -1
+          var texture3 = new THREE.TextureLoader().load(
+            `/models/alphabets/Alp${this.module3.pickFour[2]}.png`
+          )
+          texture3.wrapT = THREE.RepeatWrapping
+          texture3.repeat.y = -1
+          var texture4 = new THREE.TextureLoader().load(
+            `/models/alphabets/Alp${this.module3.pickFour[3]}.png`
+          )
+          texture4.wrapT = THREE.RepeatWrapping
+          texture4.repeat.y = -1
+
+          if (o.isMesh) {
+            if (o.name === 'Cube000') o.material = util.cubeMaterial
+            else if (o.name === 'LED') LEDcreate(o, this.module3, 'glow')
+            else if (o.name.includes('Lface1')) {
+              o.material = new THREE.MeshPhongMaterial({map: texture1})
+              this.targetList.push(o)
+            } else if (o.name.includes('Lface2')) {
+              o.material = new THREE.MeshPhongMaterial({map: texture2})
+              this.targetList.push(o)
+            } else if (o.name.includes('Lface3')) {
+              o.material = new THREE.MeshPhongMaterial({map: texture3})
+              this.targetList.push(o)
+            } else if (o.name.includes('Lface4')) {
+              o.material = new THREE.MeshPhongMaterial({map: texture4})
+              this.targetList.push(o)
+            } else if (o.name.includes('Letter')) {
+              o.material = new THREE.MeshPhongMaterial({map: texture1})
+              this.targetList.push(o)
+            } else if (o.name.includes('LG')) {
+              o.material = new THREE.MeshPhongMaterial({
+                color: new THREE.Color(0x000000),
+                shininess: 100
+              })
+            } else {
+              o.material = util.defaultMaterial
+            }
+          }
+        })
+        this.pickFour = pickFour.sort((a, b) => a - b)
+        this.module3.castShadow = true
+        this.module3.receiveShadow = true
+        this.module3.audio = document.createElement('audio')
+        var source = document.createElement('source')
+        source.src = '/models/sound/press1.mov'
+        this.module3.audio.appendChild(source)
+      })
     }
 
 }
