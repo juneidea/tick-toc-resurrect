@@ -212,8 +212,9 @@ export default class BoxLoader {
           })
           this.parallel.castShadow = true
           this.parallel.receiveShadow = true
+
+          this.initModule1()
         })
-        this.initModule1()
     }
 
     initModule1() {
@@ -274,8 +275,9 @@ export default class BoxLoader {
             let source = document.createElement('source')
             source.src = '/models/sound/wipe.mp3'
             this.module1.audio.appendChild(source)
+
+            this.initModule2()
         })
-        this.initModule2()
     }
 
     initModule2() {

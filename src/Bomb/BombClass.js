@@ -2,8 +2,12 @@ import * as THREE from 'three'
 
 import Lights from './Lights'
 import BoxLoader from './Box'
-import {sortByKey} from '../util'
+
 import {clockCases} from './modules/clock'
+import {SEDS} from './modules/bigbutton'
+
+import {sortByKey} from '../util'
+import * as util from './modules/util'
 
 export default class BombClass {
     constructor(mount, state) {
@@ -89,10 +93,52 @@ export default class BombClass {
         })
 
         document.addEventListener('mouseup', () => {
+            const {minute, tenSecond, singleSecond} = this.state
             this.isDragging = false
+            if (
+                this.module2.children.filter(a => a.name.startsWith('Button'))[0]
+                  .position.x < 0.4
+              ) {
+                this.module2.children
+                  .filter(a => a.name.startsWith('Button'))
+                  .map(b => {
+                    b.position.x += 0.18
+                    return b
+                  })
+              }
+              if (
+                this.intersects[0] &&
+                this.intersects[0].object.name.startsWith('Button')
+              ) {
+                if (this.intersects[0].object.userData.hold === true) {
+                  if (
+                    minute === SEDS[this.SEDIndex].num ||
+                    tenSecond === SEDS[this.SEDIndex].num ||
+                    singleSecond === SEDS[this.SEDIndex].num
+                  ) {
+                    this.props.passModule('BigButton')
+                    this.handlePass('module2')
+                    this.removeAllTargets('Button')
+                  } else {
+                    this.box.audio.play()
+                    this.props.setStrike()
+                  }
+                } else {
+                  this.props.passModule('BigButton')
+                  this.handlePass('module2')
+                  this.removeAllTargets('Button')
+                }
+            }
         })
 
-        // this.projector = new THREE.Projector()
+        document.addEventListener(
+            'mousedown',
+            e => {
+              this.onDocumentMouseDown(e)
+            },
+            false
+        )
+
         this.start()
     }
 
@@ -100,8 +146,8 @@ export default class BombClass {
         // reference to 3d models after loading
         this.box = this.scene.children[3]
         this.clock = this.box.children[2]
-        this.module1 = this.box.children[8]
-        this.module2 = this.box.children[7]
+        this.module1 = this.box.children[7]
+        this.module2 = this.box.children[8]
         // then start the clock
         this.timer = setInterval(() => {
             if(this.state.count < 1) clearInterval(this.timer)
@@ -176,4 +222,545 @@ export default class BombClass {
         this.renderer.render(this.scene, this.camera)
         this.frameId = requestAnimationFrame(this.animate)
     }
+
+    // Game handles
+
+    handleWires = wire => {
+        this.module1.audio.play()
+        if (wire.userData.correct === true) {
+          this.props.passModule('Wires')
+          this.handlePass('module1')
+        } else {
+          this.box.audio.play()
+          this.props.setStrike()
+        }
+        this.module1.remove(wire)
+        this.removeTarget(wire)
+    }
+
+    handlePass = moduleName => {
+        this.box.audio1.play()
+        const glow = this[moduleName].children.find(child => child.name === 'glow')
+        const LED = this[moduleName].children.find(child => child.name === 'LED')
+        glow.visible = true
+        LED.material = util.LEDMaterialON
+    }
+    
+    removeTarget = target => {
+        this.targetList = this.targetList.filter(item => item !== target)
+    }
+    
+    removeAllTargets = target => {
+        this.targetList = this.targetList.filter(
+          item => !item.name.includes(target)
+        )
+    }
+
+
+
+    // Game mouse down logic
+
+    onDocumentMouseDown = event => {
+        // the following line would stop any other event handler from firing
+        // (such as the mouse's TrackballControls)
+        // event.preventDefault();
+    
+        // update the mouse variable
+        this.mouse.x = event.clientX / window.innerWidth * 2 - 1
+        this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+    
+        // find intersections
+        // create a Ray with origin at the mouse position
+        //   and direction into the scene (camera direction)
+        let vector = new THREE.Vector3(this.mouse.x, this.mouse.y, 1)
+        vector.unproject(this.camera);
+        let ray = new THREE.Raycaster(
+          this.camera.position,
+          vector.sub(this.camera.position).normalize()
+        )
+        // create an array containing all objects in the scene with which the ray intersects
+        this.intersects = ray.intersectObjects(this.targetList)
+        // if there is one (or more) intersections
+        if (this.intersects.length > 0) {
+          let itemClicked = this.intersects[0].object
+          if (this.targetList.includes(itemClicked)) {
+            let {name} = itemClicked
+            if (name.startsWith('Wire')) {
+              this.handleWires(itemClicked)
+            } else if (name.startsWith('Button')) {
+              this.module2.audio.play()
+              this.module2.children
+                .filter(child => child.name.startsWith('Button'))
+                .forEach(child => {
+                  child.position.x -= 0.18
+                })
+            }
+            // module3
+            // if (name.startsWith('Letter') || name.startsWith('Lface')) {
+            //   if (
+            //     this.intersects[0].object.material.map.image.src.slice(-6, -5) !==
+            //     'p'
+            //   ) {
+            //     if (
+            //       this.module3.pickFour[0] ===
+            //       Number(
+            //         this.intersects[0].object.material.map.image.src.slice(-6, -5) +
+            //           this.intersects[0].object.material.map.image.src.slice(-5, -4)
+            //       )
+            //     ) {
+            //       this.module3.audio.play()
+            //       this.module3.children
+            //         .filter(a =>
+            //           a.name.includes('' + this.intersects[0].object.name.slice(-1))
+            //         )
+            //         .map(b => {
+            //           if (b.position.x > 1.26) b.position.x -= 0.07
+            //           if (b.position.x < 0.5 && b.position.x > 0.35) {
+            //             b.position.x -= 0.07
+            //             b.material.color.setRGB(0, 1, 0)
+            //           }
+            //         })
+            //       this.removeTarget(this.intersects[0].object)
+            //       this.module3.pickFour.shift()
+            //       if (!this.module3.pickFour[0]) this.handleLetters()
+            //     } else {
+            //       this.box.audio.play()
+            //       this.props.setStrike()
+            //     }
+            //   } else if (
+            //     this.module3.pickFour[0] ===
+            //     Number(
+            //       this.intersects[0].object.material.map.image.src.slice(-5, -4)
+            //     )
+            //   ) {
+            //     this.module3.audio.play()
+            //     this.module3.children
+            //       .filter(a =>
+            //         a.name.includes('' + this.intersects[0].object.name.slice(-1))
+            //       )
+            //       .map(b => {
+            //         if (b.position.x > 1.26) b.position.x -= 0.07
+            //         if (b.position.x < 0.5 && b.position.x > 0.35) {
+            //           b.position.x -= 0.07
+            //           b.material.color.setRGB(0, 1, 0)
+            //         }
+            //       })
+            //     this.removeTarget(this.intersects[0].object)
+            //     this.module3.pickFour.shift()
+            //     if (!this.module3.pickFour[0]) this.handleLetters()
+            //   } else {
+            //     this.box.audio.play()
+            //     this.props.setStrike()
+            //   }
+            // }
+            // module4
+            // let head = this.module4.head
+    
+            // if (this.intersects[0].object.name.includes('Go')) {
+            //   this.intersects[0].object.material = util.flatBlack
+            //   if (this.intersects[0].object.name === 'GoUp') {
+            //     if (head.name[3] !== '1') {
+            //       let newHead =
+            //         head.name.slice(0, 3) +
+            //         (Number(head.name[3]) - 1) +
+            //         head.name[4] //new position established
+            //       if (
+            //         CanMove(
+            //           [this.module4.head.name[3], this.module4.head.name[4]],
+            //           selectedMazeCase.Maze,
+            //           this.intersects[0].object.name
+            //         )
+            //       ) {
+            //         this.module4.audio.play()
+            //         head.material = util.flatBlack // unpaint
+            //         head = this.module4.children.filter(a => a.name === newHead)[0] // get the newHead position
+            //         head.material = util.white // paint
+            //         this.module4.head = head
+            //       } else {
+            //         this.box.audio.play()
+            //         this.props.setStrike()
+            //       }
+            //     }
+            //   } else if (this.intersects[0].object.name === 'GoDown') {
+            //     if (head.name[3] !== '6') {
+            //       let newHead =
+            //         head.name.slice(0, 3) +
+            //         (Number(head.name[3]) + 1) +
+            //         head.name[4]
+            //       if (
+            //         CanMove(
+            //           [this.module4.head.name[3], this.module4.head.name[4]],
+            //           selectedMazeCase.Maze,
+            //           this.intersects[0].object.name
+            //         )
+            //       ) {
+            //         this.module4.audio.play()
+            //         head.material = util.flatBlack // unpaint
+            //         head = this.module4.children.filter(a => a.name === newHead)[0] // get the newHead position
+            //         head.material = util.white // paint
+            //         this.module4.head = head
+            //       } else {
+            //         this.box.audio.play()
+            //         this.props.setStrike()
+            //       }
+            //     }
+            //   } else if (this.intersects[0].object.name === 'GoLeft') {
+            //     if (head.name[4] !== '1') {
+            //       let newHead = head.name.slice(0, 4) + (Number(head.name[4]) - 1)
+            //       if (
+            //         CanMove(
+            //           [this.module4.head.name[3], this.module4.head.name[4]],
+            //           selectedMazeCase.Maze,
+            //           this.intersects[0].object.name
+            //         )
+            //       ) {
+            //         this.module4.audio.play()
+            //         head.material = util.flatBlack // unpaint
+            //         head = this.module4.children.filter(a => a.name === newHead)[0] // get the newHead position
+            //         head.material = util.white // paint
+            //         this.module4.head = head
+            //       } else {
+            //         this.box.audio.play()
+            //         this.props.setStrike()
+            //       }
+            //     }
+            //   } else if (this.intersects[0].object.name === 'GoRight') {
+            //     if (head.name[4] !== '6') {
+            //       let newHead = head.name.slice(0, 4) + (Number(head.name[4]) + 1)
+            //       if (
+            //         CanMove(
+            //           [this.module4.head.name[3], this.module4.head.name[4]],
+            //           selectedMazeCase.Maze,
+            //           this.intersects[0].object.name
+            //         )
+            //       ) {
+            //         this.module4.audio.play()
+            //         head.material = util.flatBlack // unpaint
+            //         head = this.module4.children.filter(a => a.name === newHead)[0] // get the newHead position
+            //         head.material = util.white // paint
+            //         this.module4.head = head
+            //       } else {
+            //         this.box.audio.play()
+            //         this.props.setStrike()
+            //       }
+            //     }
+            //   }
+    
+            //   if (
+            //     this.module4.children[0].userData.winningPosition ===
+            //     this.module4.head.name
+            //   ) {
+            //     this.handlePass('module4')
+            //     this.props.passModule('Maze')
+            //     this.removeAllTargets('Go')
+            //   }
+            // }
+    
+            // module5
+            // if (this.intersects[0].object.name.includes('Kface')) {
+            //   const lit = str => {
+            //     this.module5.children.filter(a => a.name.includes(str)).map(b => {
+            //       b.visible = true
+            //     })
+            //   }
+            //   const readAgain = () => {
+            //     let texture5 = new THREE.TextureLoader().load(
+            //       `/models/Read${Math.ceil(Math.random() * 4)}.png`
+            //     )
+            //     texture5.wrapT = THREE.RepeatWrapping
+            //     texture5.repeat.y = -1
+            //     this.module5.children.filter(
+            //       a => a.name === 'ReadNumber'
+            //     )[0].material = new THREE.MeshPhongMaterial({map: texture5})
+            //   }
+            //   const resetKey = () => {
+            //     this.module5.children
+            //       .filter(a => a.name.includes('K'))
+            //       .map(b => (b.visible = false))
+            //     this.setKey = k => {
+            //       this.module5.children
+            //         .filter(a => a.name.includes(k))
+            //         .map(b => (b.visible = true))
+            //     }
+            //     this.module5.children.filter(
+            //       a => a.name === 'Kface1'
+            //     )[0].material = new THREE.MeshPhongMaterial({
+            //       map: this.module5.textures[0]
+            //     })
+            //     this.module5.children.filter(
+            //       a => a.name === 'Kface2'
+            //     )[0].material = new THREE.MeshPhongMaterial({
+            //       map: this.module5.textures[1]
+            //     })
+            //     this.module5.children.filter(
+            //       a => a.name === 'Kface3'
+            //     )[0].material = new THREE.MeshPhongMaterial({
+            //       map: this.module5.textures[2]
+            //     })
+            //     this.module5.children.filter(
+            //       a => a.name === 'Kface4'
+            //     )[0].material = new THREE.MeshPhongMaterial({
+            //       map: this.module5.textures[3]
+            //     })
+            //     setTimeout(() => this.setKey('1'), 250)
+            //     setTimeout(() => this.setKey('2'), 500)
+            //     setTimeout(() => this.setKey('3'), 750)
+            //     setTimeout(() => this.setKey('4'), 1000)
+            //   }
+            //   const reRun = () => {
+            //     readAgain()
+            //     this.module5.randomKey()
+            //     resetKey()
+            //   }
+            //   const runDown = () => {
+            //     this.module5.children
+            //       .filter(a => a.name.includes('CCED'))
+            //       .map(b => (b.visible = false))
+            //     this.module5.correct = '5'
+            //   }
+            //   let readNumber = this.module5.children
+            //     .filter(a => a.name === 'ReadNumber')[0]
+            //     .material.map.image.src.slice(-5)[0]
+            //   this.module5.audio.play()
+            //   if (this.module5.correct === '5') {
+            //     if (Number(readNumber) < 3) {
+            //       this.module5.quest[0] = [
+            //         2,
+            //         Number(
+            //           this.module5.children
+            //             .filter(a => a.name === 'Kface2')[0]
+            //             .material.map.image.src.slice(-5, -4)
+            //         )
+            //       ]
+            //     } else {
+            //       this.module5.quest[0] = [
+            //         Number(readNumber),
+            //         Number(
+            //           this.module5.children
+            //             .filter(a => a.name === `Kface${readNumber}`)[0]
+            //             .material.map.image.src.slice(-5, -4)
+            //         )
+            //       ]
+            //     }
+            //     if (
+            //       this.intersects[0].object.name[5] ===
+            //       this.module5.quest[0][0] + ''
+            //     ) {
+            //       lit('5')
+            //       this.module5.correct = '6'
+            //       reRun()
+            //     } else {
+            //       this.box.audio.play()
+            //       this.props.setStrike()
+            //       reRun()
+            //     }
+            //   } else if (this.module5.correct === '6') {
+            //     if (readNumber === '1') {
+            //       let position4 = this.module5.children
+            //         .filter(a => a.name.includes('Kface'))
+            //         .filter(b => b.material.map.image.src.slice(-5, -4) === '4')[0]
+            //       this.module5.quest[1] = [Number(position4.name.slice(-1)), 4]
+            //     } else if (readNumber === '3') {
+            //       this.module5.quest[1] = [
+            //         1,
+            //         Number(
+            //           this.module5.children
+            //             .filter(a => a.name === `Kface1`)[0]
+            //             .material.map.image.src.slice(-5, -4)
+            //         )
+            //       ]
+            //     } else {
+            //       this.module5.quest[1] = [
+            //         this.module5.quest[0][0],
+            //         Number(
+            //           this.module5.children
+            //             .filter(
+            //               a => a.name === `Kface${this.module5.quest[0][0]}`
+            //             )[0]
+            //             .material.map.image.src.slice(-5, -4)
+            //         )
+            //       ]
+            //     }
+            //     if (
+            //       this.intersects[0].object.name[5] ===
+            //       this.module5.quest[1][0] + ''
+            //     ) {
+            //       lit('6')
+            //       this.module5.correct = '7'
+            //       reRun()
+            //     } else {
+            //       this.box.audio.play()
+            //       this.props.setStrike()
+            //       runDown()
+            //       reRun()
+            //     }
+            //   } else if (this.module5.correct === '7') {
+            //     if (readNumber === '1') {
+            //       let position = this.module5.children
+            //         .filter(a => a.name.includes('Kface'))
+            //         .filter(
+            //           b =>
+            //             b.material.map.image.src.slice(-5, -4) ===
+            //             this.module5.quest[1][1] + ''
+            //         )[0]
+            //       this.module5.quest[2] = [
+            //         Number(position.name.slice(-1)),
+            //         this.module5.quest[1][1]
+            //       ]
+            //     } else if (readNumber === '2') {
+            //       let position = this.module5.children
+            //         .filter(a => a.name.includes('Kface'))
+            //         .filter(
+            //           b =>
+            //             b.material.map.image.src.slice(-5, -4) ===
+            //             this.module5.quest[0][1] + ''
+            //         )[0]
+            //       this.module5.quest[2] = [
+            //         Number(position.name.slice(-1)),
+            //         this.module5.quest[0][1]
+            //       ]
+            //     } else if (readNumber === '3') {
+            //       this.module5.quest[2] = [
+            //         3,
+            //         Number(
+            //           this.module5.children
+            //             .filter(a => a.name === `Kface3`)[0]
+            //             .material.map.image.src.slice(-5, -4)
+            //         )
+            //       ]
+            //     } else if (readNumber === '4') {
+            //       let position4 = this.module5.children
+            //         .filter(a => a.name.includes('Kface'))
+            //         .filter(b => b.material.map.image.src.slice(-5, -4) === '4')[0]
+            //       this.module5.quest[2] = [Number(position4.name.slice(-1)), 4]
+            //     }
+            //     if (
+            //       this.intersects[0].object.name[5] ===
+            //       this.module5.quest[2][0] + ''
+            //     ) {
+            //       lit('7')
+            //       this.module5.correct = '8'
+            //       reRun()
+            //     } else {
+            //       this.box.audio.play()
+            //       this.props.setStrike()
+            //       runDown()
+            //       reRun()
+            //     }
+            //   } else if (this.module5.correct === '8') {
+            //     if (readNumber === '1') {
+            //       this.module5.quest[3] = [
+            //         this.module5.quest[0][0],
+            //         Number(
+            //           this.module5.children
+            //             .filter(
+            //               a => a.name === `Kface${this.module5.quest[0][0]}`
+            //             )[0]
+            //             .material.map.image.src.slice(-5, -4)
+            //         )
+            //       ]
+            //     } else if (readNumber === '2') {
+            //       this.module5.quest[3] = [
+            //         1,
+            //         Number(
+            //           this.module5.children
+            //             .filter(a => a.name === `Kface1`)[0]
+            //             .material.map.image.src.slice(-5, -4)
+            //         )
+            //       ]
+            //     } else {
+            //       this.module5.quest[3] = [
+            //         this.module5.quest[1][0],
+            //         Number(
+            //           this.module5.children
+            //             .filter(
+            //               a => a.name === `Kface${this.module5.quest[1][0]}`
+            //             )[0]
+            //             .material.map.image.src.slice(-5, -4)
+            //         )
+            //       ]
+            //     }
+            //     if (
+            //       this.intersects[0].object.name[5] ===
+            //       this.module5.quest[3][0] + ''
+            //     ) {
+            //       lit('8')
+            //       this.module5.correct = '9'
+            //       reRun()
+            //     } else {
+            //       this.box.audio.play()
+            //       this.props.setStrike()
+            //       runDown()
+            //       reRun()
+            //     }
+            //   } else if (this.module5.correct === '9') {
+            //     if (readNumber === '1') {
+            //       let position = this.module5.children
+            //         .filter(a => a.name.includes('Kface'))
+            //         .filter(
+            //           b =>
+            //             b.material.map.image.src.slice(-5, -4) ===
+            //             this.module5.quest[0][1] + ''
+            //         )[0]
+            //       this.module5.quest[4] = [
+            //         Number(position.name.slice(-1)),
+            //         this.module5.quest[0][1]
+            //       ]
+            //     } else if (readNumber === '2') {
+            //       let position = this.module5.children
+            //         .filter(a => a.name.includes('Kface'))
+            //         .filter(
+            //           b =>
+            //             b.material.map.image.src.slice(-5, -4) ===
+            //             this.module5.quest[1][1] + ''
+            //         )[0]
+            //       this.module5.quest[4] = [
+            //         Number(position.name.slice(-1)),
+            //         this.module5.quest[1][1]
+            //       ]
+            //     } else if (readNumber === '3') {
+            //       let position = this.module5.children
+            //         .filter(a => a.name.includes('Kface'))
+            //         .filter(
+            //           b =>
+            //             b.material.map.image.src.slice(-5, -4) ===
+            //             this.module5.quest[3][1] + ''
+            //         )[0]
+            //       this.module5.quest[4] = [
+            //         Number(position.name.slice(-1)),
+            //         this.module5.quest[3][1]
+            //       ]
+            //     } else if (readNumber === '4') {
+            //       let position = this.module5.children
+            //         .filter(a => a.name.includes('Kface'))
+            //         .filter(
+            //           b =>
+            //             b.material.map.image.src.slice(-5, -4) ===
+            //             this.module5.quest[2][1] + ''
+            //         )[0]
+            //       this.module5.quest[4] = [
+            //         Number(position.name.slice(-1)),
+            //         this.module5.quest[2][1]
+            //       ]
+            //     }
+            //     if (
+            //       this.intersects[0].object.name[5] ===
+            //       this.module5.quest[4][0] + ''
+            //     ) {
+            //       lit('9')
+            //       this.handleKeys()
+            //       this.module5.children
+            //         .filter(a => a.name.includes('Kface'))
+            //         .map(b => this.removeTarget(b))
+            //     } else {
+            //       this.box.audio.play()
+            //       this.props.setStrike()
+            //       runDown()
+            //       reRun()
+            //     }
+            //   }
+            // }
+          }
+        }
+      }
 }
