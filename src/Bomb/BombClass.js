@@ -210,6 +210,8 @@ export default class BombClass {
         cancelAnimationFrame(this.animate)
         window.removeEventListener('resize', this.onWindowResize)
         this.mount.removeChild(this.renderer.domElement)
+        this.targetList = []
+        this.intersects = undefined
     }
 
     onWindowResize(camera) {
@@ -264,10 +266,11 @@ export default class BombClass {
         // the following line would stop any other event handler from firing
         // (such as the mouse's TrackballControls)
         // event.preventDefault();
-    
+        const rect = this.renderer.domElement.getBoundingClientRect();
+
         // update the mouse variable
-        this.mouse.x = event.clientX / window.innerWidth * 2 - 1
-        this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+        this.mouse.x = ( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1;
+        this.mouse.y = - ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;
     
         // find intersections
         // create a Ray with origin at the mouse position
@@ -278,11 +281,13 @@ export default class BombClass {
           this.camera.position,
           vector.sub(this.camera.position).normalize()
         )
+
         // create an array containing all objects in the scene with which the ray intersects
         this.intersects = ray.intersectObjects(this.targetList)
         // if there is one (or more) intersections
         if (this.intersects.length > 0) {
           let itemClicked = this.intersects[0].object
+          console.log(this.targetList)
           if (this.targetList.includes(itemClicked)) {
             let {name} = itemClicked
             if (name.startsWith('Wire')) {
