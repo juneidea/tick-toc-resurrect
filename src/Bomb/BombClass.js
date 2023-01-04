@@ -11,12 +11,13 @@ import {sortByKey} from '../util'
 import * as util from './modules/util'
 
 export default class BombClass {
-    constructor(mount, state, setActivated, setRestart, setGameStatus) {
+    constructor(mount, state, setActivated, setRestart, setGameStatus, setFinishGame) {
         this.mount = mount
         this.state = state
         this.setActivated = setActivated
         this.setRestart = setRestart
         this.setGameStatus = setGameStatus
+        this.setFinishGame = setFinishGame
         this.scene = new THREE.Scene()
         this.camera = new THREE.PerspectiveCamera(
             36,
@@ -255,7 +256,7 @@ export default class BombClass {
         glow.visible = true
         LED.material = util.LEDMaterialON
         this.state.modulesPassed += 1
-        if (this.state.modulesPassed === 5) {
+        if (this.state.modulesPassed === 2) {
           this.handleDiffusal()
         }
     }
@@ -284,7 +285,7 @@ export default class BombClass {
       }
     }
 
-    handleFailure = () => {
+    handleFailure() {
       this.box.audio2.play()
       const {count} = this.state
       if (count) clearInterval(this.timer)
@@ -292,6 +293,14 @@ export default class BombClass {
       setTimeout(() => {
         this.scene.remove(this.box)
       }, 1400)
+      this.setFinishGame({
+        url: 'api/games',
+        startTime: this.state.startTime,
+        finishTime: this.state.count,
+        moduleTotal: 5,
+        strikeTotal: this.state.strikeTotal,
+        status: 'failed'
+      })
       setTimeout(() => {
         this.setActivated(false)
         this.setRestart(true)
@@ -299,7 +308,7 @@ export default class BombClass {
       }, 2700)
     }
 
-    handleDiffusal = () => {
+    handleDiffusal() {
       this.box.audio3.play()
       clearInterval(this.timer)
       this.targetList = []
@@ -315,8 +324,15 @@ export default class BombClass {
         this.setRestart(true)
         this.setGameStatus('diffused')
       }, 5000)
-      // const {count} = this.state
-      // this.props.endGame('diffused', count)
+      this.setFinishGame()
+      this.setFinishGame({
+        url: 'api/games',
+        startTime: this.state.startTime,
+        finishTime: this.state.count,
+        moduleTotal: 5,
+        strikeTotal: this.state.strikeTotal,
+        status: 'diffused'
+      })
     }
 
 

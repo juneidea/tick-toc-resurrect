@@ -10,6 +10,7 @@ import BombClass from './BombClass'
 const Bomb = ({ startTime, strikesAllowed }) => {
   const strikeTotal = strikesAllowed ? 3 : 1
   const [state] = useState({
+    startTime,
     count: startTime,
     strikeTotal,
     minute: 0,
@@ -21,12 +22,13 @@ const Bomb = ({ startTime, strikesAllowed }) => {
   const [activated, setActivated] = useState(false)
   const [restart, setRestart] = useState(false)
   const [gameStatus, setGameStatus] = useState('activating')
+  const [finishGame, setFinishGame] = useState({})
   const mount = useRef(null)
 
   useEffect(() => {
     const renderer = new THREE.WebGLRenderer({ antialias: true })
     
-    const canvas = new BombClass(mount.current, state, setActivated, setRestart, setGameStatus)
+    const canvas = new BombClass(mount.current, state, setActivated, setRestart, setGameStatus, setFinishGame)
     canvas.initialize(renderer)
     canvas.animate()
     setTimeout(() => {
@@ -39,6 +41,18 @@ const Bomb = ({ startTime, strikesAllowed }) => {
     }
   }, [state])
 
+  useEffect(() => {
+    const {url, ...game} = finishGame
+    if (url) {
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({...game})
+      }).then((res) => res.json()).then((data) => {})
+    }
+  }, [finishGame])
 
   return (
     <>
