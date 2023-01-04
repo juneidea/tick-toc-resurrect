@@ -11,11 +11,12 @@ import {sortByKey} from '../util'
 import * as util from './modules/util'
 
 export default class BombClass {
-    constructor(mount, state, setRestart, setActivated) {
+    constructor(mount, state, setActivated, setRestart, setGameStatus) {
         this.mount = mount
         this.state = state
-        this.setRestart = setRestart
         this.setActivated = setActivated
+        this.setRestart = setRestart
+        this.setGameStatus = setGameStatus
         this.scene = new THREE.Scene()
         this.camera = new THREE.PerspectiveCamera(
             36,
@@ -254,6 +255,9 @@ export default class BombClass {
         glow.visible = true
         LED.material = util.LEDMaterialON
         this.state.modulesPassed += 1
+        if (this.state.modulesPassed === 5) {
+          this.handleDiffusal()
+        }
     }
     
     removeTarget(target) {
@@ -289,9 +293,30 @@ export default class BombClass {
         this.scene.remove(this.box)
       }, 1400)
       setTimeout(() => {
-        this.setRestart(true)
         this.setActivated(false)
+        this.setRestart(true)
+        this.setGameStatus('failed')
       }, 2700)
+    }
+
+    handleDiffusal = () => {
+      this.box.audio3.play()
+      clearInterval(this.timer)
+      this.targetList = []
+      const strikes = this.clock.children.filter(child => child.name.startsWith('Strike'))
+      strikes.forEach(s => {
+        s.visible = true
+        s.material = util.green
+      })
+      const digitals = this.clock.children[6].children
+      digitals.forEach(d => d.material = util.green)
+      setTimeout(() => {
+        this.setActivated(false)
+        this.setRestart(true)
+        this.setGameStatus('diffused')
+      }, 5000)
+      // const {count} = this.state
+      // this.props.endGame('diffused', count)
     }
 
 

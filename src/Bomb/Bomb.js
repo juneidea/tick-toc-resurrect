@@ -20,12 +20,13 @@ const Bomb = ({ startTime, strikesAllowed }) => {
   })
   const [activated, setActivated] = useState(false)
   const [restart, setRestart] = useState(false)
+  const [gameStatus, setGameStatus] = useState('activating')
   const mount = useRef(null)
 
   useEffect(() => {
     const renderer = new THREE.WebGLRenderer({ antialias: true })
     
-    const canvas = new BombClass(mount.current, state, setRestart, setActivated)
+    const canvas = new BombClass(mount.current, state, setActivated, setRestart, setGameStatus)
     canvas.initialize(renderer)
     canvas.animate()
     setTimeout(() => {
@@ -41,6 +42,8 @@ const Bomb = ({ startTime, strikesAllowed }) => {
 
   return (
     <>
+
+
       {!restart && !activated && (
         <div className="stamp activating--banner">
           <div>Bomb activating. Get ready.</div>
@@ -48,10 +51,11 @@ const Bomb = ({ startTime, strikesAllowed }) => {
         </div>
       )}
       {restart && (
-        <div className="stamp activating--banner">
-          <div>Boom. Try again!</div>
-          <FaCog className="loader" />
-          <a href='/new-game'>new game</a>
+        <div className="banner-container">
+          <div className="stamp activating--banner">
+            <div className={`banner ${gameStatus}--banner`}>{gameStatus}</div>
+            <a id={gameStatus} href='/new-game'>new game</a>
+          </div>
         </div>
       )}
       <div
