@@ -5,6 +5,7 @@ import BoxLoader from './Box'
 
 import {clockCases} from './modules/clock'
 import {SEDS} from './modules/bigbutton'
+import {CanMove} from './modules/mod4'
 
 import {sortByKey} from '../util'
 import * as util from './modules/util'
@@ -127,6 +128,10 @@ export default class BombClass {
                   this.removeAllTargets('Button')
                 }
             }
+            this.module4.children.filter(a => a.name.includes('Go')).map(b => {
+              if (b.material.shininess === 10) b.material = util.cubeMaterial
+              return b
+            })
         })
 
         document.addEventListener(
@@ -147,6 +152,7 @@ export default class BombClass {
         this.module1 = this.box.children[7]
         this.module2 = this.box.children[8]
         this.module3 = this.box.children[9]
+        this.module4 = this.box.children[10]
         // then start the clock
         this.timer = setInterval(() => {
             if(this.state.count < 1) clearInterval(this.timer)
@@ -223,6 +229,7 @@ export default class BombClass {
         this.renderer.render(this.scene, this.camera)
         this.frameId = requestAnimationFrame(this.animate)
     }
+    
 
     // Game handles
 
@@ -371,107 +378,106 @@ export default class BombClass {
               }
             }
             // module4
-            // let head = this.module4.head
+            let head = this.module4.head
     
-            // if (this.intersects[0].object.name.includes('Go')) {
-            //   this.intersects[0].object.material = util.flatBlack
-            //   if (this.intersects[0].object.name === 'GoUp') {
-            //     if (head.name[3] !== '1') {
-            //       let newHead =
-            //         head.name.slice(0, 3) +
-            //         (Number(head.name[3]) - 1) +
-            //         head.name[4] //new position established
-            //       if (
-            //         CanMove(
-            //           [this.module4.head.name[3], this.module4.head.name[4]],
-            //           selectedMazeCase.Maze,
-            //           this.intersects[0].object.name
-            //         )
-            //       ) {
-            //         this.module4.audio.play()
-            //         head.material = util.flatBlack // unpaint
-            //         head = this.module4.children.filter(a => a.name === newHead)[0] // get the newHead position
-            //         head.material = util.white // paint
-            //         this.module4.head = head
-            //       } else {
-            //         this.box.audio.play()
-            //         this.setStrike()
-            //       }
-            //     }
-            //   } else if (this.intersects[0].object.name === 'GoDown') {
-            //     if (head.name[3] !== '6') {
-            //       let newHead =
-            //         head.name.slice(0, 3) +
-            //         (Number(head.name[3]) + 1) +
-            //         head.name[4]
-            //       if (
-            //         CanMove(
-            //           [this.module4.head.name[3], this.module4.head.name[4]],
-            //           selectedMazeCase.Maze,
-            //           this.intersects[0].object.name
-            //         )
-            //       ) {
-            //         this.module4.audio.play()
-            //         head.material = util.flatBlack // unpaint
-            //         head = this.module4.children.filter(a => a.name === newHead)[0] // get the newHead position
-            //         head.material = util.white // paint
-            //         this.module4.head = head
-            //       } else {
-            //         this.box.audio.play()
-            //         this.setStrike()
-            //       }
-            //     }
-            //   } else if (this.intersects[0].object.name === 'GoLeft') {
-            //     if (head.name[4] !== '1') {
-            //       let newHead = head.name.slice(0, 4) + (Number(head.name[4]) - 1)
-            //       if (
-            //         CanMove(
-            //           [this.module4.head.name[3], this.module4.head.name[4]],
-            //           selectedMazeCase.Maze,
-            //           this.intersects[0].object.name
-            //         )
-            //       ) {
-            //         this.module4.audio.play()
-            //         head.material = util.flatBlack // unpaint
-            //         head = this.module4.children.filter(a => a.name === newHead)[0] // get the newHead position
-            //         head.material = util.white // paint
-            //         this.module4.head = head
-            //       } else {
-            //         this.box.audio.play()
-            //         this.setStrike()
-            //       }
-            //     }
-            //   } else if (this.intersects[0].object.name === 'GoRight') {
-            //     if (head.name[4] !== '6') {
-            //       let newHead = head.name.slice(0, 4) + (Number(head.name[4]) + 1)
-            //       if (
-            //         CanMove(
-            //           [this.module4.head.name[3], this.module4.head.name[4]],
-            //           selectedMazeCase.Maze,
-            //           this.intersects[0].object.name
-            //         )
-            //       ) {
-            //         this.module4.audio.play()
-            //         head.material = util.flatBlack // unpaint
-            //         head = this.module4.children.filter(a => a.name === newHead)[0] // get the newHead position
-            //         head.material = util.white // paint
-            //         this.module4.head = head
-            //       } else {
-            //         this.box.audio.play()
-            //         this.setStrike()
-            //       }
-            //     }
-            //   }
+            if (this.intersects[0].object.name.includes('Go')) {
+              this.intersects[0].object.material = util.flatBlack
+              if (this.intersects[0].object.name === 'GoUp') {
+                if (head.name[3] !== '1') {
+                  let newHead =
+                    head.name.slice(0, 3) +
+                    (Number(head.name[3]) - 1) +
+                    head.name[4] //new position established
+                  if (
+                    CanMove(
+                      [this.module4.head.name[3], this.module4.head.name[4]],
+                      this.module4.selectedMazeCase.Maze,
+                      this.intersects[0].object.name
+                    )
+                  ) {
+                    this.module4.audio.play()
+                    head.material = util.flatBlack // unpaint
+                    head = this.module4.children.filter(a => a.name === newHead)[0] // get the newHead position
+                    head.material = util.white // paint
+                    this.module4.head = head
+                  } else {
+                    this.box.audio.play()
+                    this.setStrike()
+                  }
+                }
+              } else if (this.intersects[0].object.name === 'GoDown') {
+                if (head.name[3] !== '6') {
+                  let newHead =
+                    head.name.slice(0, 3) +
+                    (Number(head.name[3]) + 1) +
+                    head.name[4]
+                  if (
+                    CanMove(
+                      [this.module4.head.name[3], this.module4.head.name[4]],
+                      this.module4.selectedMazeCase.Maze,
+                      this.intersects[0].object.name
+                    )
+                  ) {
+                    this.module4.audio.play()
+                    head.material = util.flatBlack // unpaint
+                    head = this.module4.children.filter(a => a.name === newHead)[0] // get the newHead position
+                    head.material = util.white // paint
+                    this.module4.head = head
+                  } else {
+                    this.box.audio.play()
+                    this.setStrike()
+                  }
+                }
+              } else if (this.intersects[0].object.name === 'GoLeft') {
+                if (head.name[4] !== '1') {
+                  let newHead = head.name.slice(0, 4) + (Number(head.name[4]) - 1)
+                  if (
+                    CanMove(
+                      [this.module4.head.name[3], this.module4.head.name[4]],
+                      this.module4.selectedMazeCase.Maze,
+                      this.intersects[0].object.name
+                    )
+                  ) {
+                    this.module4.audio.play()
+                    head.material = util.flatBlack // unpaint
+                    head = this.module4.children.filter(a => a.name === newHead)[0] // get the newHead position
+                    head.material = util.white // paint
+                    this.module4.head = head
+                  } else {
+                    this.box.audio.play()
+                    this.setStrike()
+                  }
+                }
+              } else if (this.intersects[0].object.name === 'GoRight') {
+                if (head.name[4] !== '6') {
+                  let newHead = head.name.slice(0, 4) + (Number(head.name[4]) + 1)
+                  if (
+                    CanMove(
+                      [this.module4.head.name[3], this.module4.head.name[4]],
+                      this.module4.selectedMazeCase.Maze,
+                      this.intersects[0].object.name
+                    )
+                  ) {
+                    this.module4.audio.play()
+                    head.material = util.flatBlack // unpaint
+                    head = this.module4.children.filter(a => a.name === newHead)[0] // get the newHead position
+                    head.material = util.white // paint
+                    this.module4.head = head
+                  } else {
+                    this.box.audio.play()
+                    this.setStrike()
+                  }
+                }
+              }
     
-            //   if (
-            //     this.module4.children[0].userData.winningPosition ===
-            //     this.module4.head.name
-            //   ) {
-            //     this.handlePass('module4')
-            //     this.props.passModule('Maze')
-            //     this.removeAllTargets('Go')
-            //   }
-            // }
+              if (
+                this.module4.children[0].userData.winningPosition ===
+                this.module4.head.name
+              ) {
+                this.handlePass('module4')
+                this.removeAllTargets('Go')
+              }
+            }
     
             // module5
             // if (this.intersects[0].object.name.includes('Kface')) {

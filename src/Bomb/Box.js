@@ -2,8 +2,9 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {clockCases} from './modules/clock'
 import {wireCount, wireCountCases} from './modules/wires'
-import {LEDcreate} from './modules/LED'
+import {LEDcreate, ranPos} from './modules/LED'
 import {SEDS} from './modules/bigbutton'
+import {mazeCases, randomProperty} from './modules/mod4'
 
 import * as util from './modules/util'
 import {generateRandomIndex, sortByKey} from '../util'
@@ -456,6 +457,84 @@ export default class BoxLoader {
         var source = document.createElement('source')
         source.src = '/models/sound/press1.mov'
         this.module3.audio.appendChild(source)
+
+        this.initModule4()
+      })
+    }
+
+    initModule4() {
+      this.module4Loader.load('models/mo4.glb', gltf => {
+        this.module4 = gltf.scene
+        this.box.add(this.module4)
+        this.module4.scale.set(0.42, 0.42, 0.42)
+        this.module4.position.x = 1.45 //Position (x = right+ left-)
+        this.module4.position.y = -0.31 //Position (y = up+, down-)
+        this.module4.position.z = 0.47 //Position (z = front +, back-)
+        this.module4.rotation.z = Math.PI / 2
+        this.module4.rotation.y = -Math.PI / 2
+        this.module4.selectedMazeCase = randomProperty(mazeCases)
+
+        this.module4.traverse(o => {
+          if (o.isMesh) {
+            if (o.name === 'Cube000') o.material = util.cubeMaterial
+            else if (
+              o.name === 'LEDbase' ||
+              o.name === 'Cylinder' ||
+              o.name === 'Cube'
+            )
+              o.material = util.defaultMaterial
+            else if (o.name === 'LED') LEDcreate(o, this.module4, 'glow')
+            else if (o.name === 'Board') {
+              o.material = util.cubeMaterial
+            } else if (o.name.includes('Go')) {
+              //arrows up down left right
+              o.material = util.cubeMaterial
+              this.targetList.push(o)
+            } else if (o.name === 'CircleOne') {
+              // first green circle  mazeCases['1'].CircleOne
+              o.material = util.green
+              o.position.copy(
+                this.module4.children.filter(
+                  a => a.name === this.module4.selectedMazeCase.CircleOne
+                )[0].position
+              )
+              o.position.x -= 0.165
+            } else if (o.name === 'CircleTwo') {
+              // second green circle
+              o.material = util.green
+              o.position.copy(
+                this.module4.children.filter(
+                  a => a.name === this.module4.selectedMazeCase.CircleTwo
+                )[0].position //Pos11, ... Pos66
+              )
+              o.position.x -= 0.165
+            } else if (o.name === 'End') {
+              //ending spot
+              o.material = util.redTran
+              let randomName = `Pos${ranPos()}${ranPos()}`
+              o.userData = {winningPosition: randomName}
+              o.position.copy(
+                this.module4.children.filter(a => a.name === randomName)[0]
+                  .position
+              )
+              o.position.x -= 0.1
+              o.position.y += 0.06
+              o.position.z -= 0.07
+            } else {
+              o.material = util.flatBlack
+            }
+          }
+        })
+        let randomName = `Pos${ranPos()}${ranPos()}`
+        let head = this.module4.children.filter(a => a.name === randomName)[0]
+        head.material = util.white
+        this.module4.head = head
+        this.module4.castShadow = true
+        this.module4.receiveShadow = true
+        this.module4.audio = document.createElement('audio')
+        var source = document.createElement('source')
+        source.src = '/models/sound/arrow.mp3'
+        this.module4.audio.appendChild(source)
       })
     }
 
