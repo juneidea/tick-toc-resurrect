@@ -11,9 +11,11 @@ import {sortByKey} from '../util'
 import * as util from './modules/util'
 
 export default class BombClass {
-    constructor(mount, state) {
+    constructor(mount, state, setRestart, setActivated) {
         this.mount = mount
         this.state = state
+        this.setRestart = setRestart
+        this.setActivated = setActivated
         this.scene = new THREE.Scene()
         this.camera = new THREE.PerspectiveCamera(
             36,
@@ -272,6 +274,24 @@ export default class BombClass {
         )
         Strike.visible = true
       }
+      if (this.state.strikeTotal === this.state.strikeCount ||
+      (this.state.count === 0 && this.state.singleSecond === 0)) {
+        this.handleFailure()
+      }
+    }
+
+    handleFailure = () => {
+      this.box.audio2.play()
+      const {count} = this.state
+      if (count) clearInterval(this.timer)
+      this.targetList = []
+      setTimeout(() => {
+        this.scene.remove(this.box)
+      }, 1400)
+      setTimeout(() => {
+        this.setRestart(true)
+        this.setActivated(false)
+      }, 2700)
     }
 
 
@@ -765,7 +785,7 @@ export default class BombClass {
                   this.module5.quest[4][0] + ''
                 ) {
                   lit('9')
-                  this.handleKeys()
+                  this.handlePass('module5')
                   this.module5.children
                     .filter(a => a.name.includes('Kface'))
                     .map(b => this.removeTarget(b))

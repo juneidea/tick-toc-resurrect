@@ -27,7 +27,7 @@ const App = () => {
         <Route exact path="/new-game" element={<NewGame setGameProps={setGameProps} />} />
         <Route exact path="/previous-games" element={<PreviousGames />} />
         <Route exact path="/leaderboard" element={<Leaderboard />} />
-        <Route exact path="/diffusing" element={gameProps.gameStarted ? <Bomb {...gameProps} /> : <NewGame setGameProps={setGameProps} />} />
+        <Route exact path="/diffusing" element={gameProps.gameStarted ? <Bomb {...gameProps} /> : <Navigate to="/new-game" replace={true}/>} />
         <Route exact path="/manual" element={<Manual />} />
         <Route render={() => <Navigate to="/" />} />
       </Routes>) : (

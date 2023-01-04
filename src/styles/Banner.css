@@ -26,6 +26,11 @@
   /* mix-blend-mode: multiply; */
 }
 
+.stamp a {
+  color: #b51e1e;
+  font-size: 3rem;
+  text-decoration: underline;
+}
 .failed--banner,
 .diffused--banner {
   font-size: 8rem;
