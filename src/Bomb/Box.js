@@ -3,8 +3,10 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {clockCases} from './modules/clock'
 import {wireCount, wireCountCases} from './modules/wires'
 import {LEDcreate, ranPos} from './modules/LED'
+import {CEDcreate} from './modules/CED'
 import {SEDS} from './modules/bigbutton'
 import {mazeCases, randomProperty} from './modules/mod4'
+
 
 import * as util from './modules/util'
 import {generateRandomIndex, sortByKey} from '../util'
@@ -535,7 +537,119 @@ export default class BoxLoader {
         var source = document.createElement('source')
         source.src = '/models/sound/arrow.mp3'
         this.module4.audio.appendChild(source)
+
+        this.initModule5()
       })
     }
 
+    initModule5() {
+      this.module5Loader.load('models/mo5.glb', gltf => {
+        this.module5 = gltf.scene
+        this.module5.correct = '5'
+        this.module5.quest = [[], [], [], []]
+        this.module5.textures = []
+        this.box.add(this.module5)
+        gltf.scene.scale.set(0.42, 0.42, 0.42)
+        gltf.scene.position.x = 0.49 //Position (x = right+ left-)
+        gltf.scene.position.y = -0.31 //Position (y = up+, down-)
+        gltf.scene.position.z = 0.47 //Position (z = front +, back-)
+        gltf.scene.rotation.z = Math.PI / 2
+        gltf.scene.rotation.y = -Math.PI / 2
+
+        this.module5.randomKey = () => {
+          let order = [1, 2, 3, 4]
+          let unOrder = []
+          for (let i = 4; i > 0; i--) {
+            let indx = Math.ceil(Math.random() * i) - 1
+            unOrder.push(order[indx])
+            order = [...order.slice(0, indx), ...order.slice(indx + 1)]
+          }
+          let texture1 = new THREE.TextureLoader().load(
+            `/models/Key${unOrder[0]}.png`
+          )
+          texture1.wrapT = THREE.RepeatWrapping
+          texture1.repeat.y = -1
+          let texture2 = new THREE.TextureLoader().load(
+            `/models/Key${unOrder[1]}.png`
+          )
+          texture2.wrapT = THREE.RepeatWrapping
+          texture2.repeat.y = -1
+          let texture3 = new THREE.TextureLoader().load(
+            `/models/Key${unOrder[2]}.png`
+          )
+          texture3.wrapT = THREE.RepeatWrapping
+          texture3.repeat.y = -1
+          let texture4 = new THREE.TextureLoader().load(
+            `/models/Key${unOrder[3]}.png`
+          )
+          texture4.wrapT = THREE.RepeatWrapping
+          texture4.repeat.y = -1
+          this.module5.textures = [texture1, texture2, texture3, texture4]
+        }
+        this.module5.randomKey()
+
+        let texture5 = new THREE.TextureLoader().load(
+          `/models/Read${Math.ceil(Math.random() * 4)}.png`
+        )
+        texture5.wrapT = THREE.RepeatWrapping
+        texture5.repeat.y = -1
+
+        this.module5.traverse(o => {
+          if (o.isMesh) {
+            if (o.name === 'Cube000') o.material = util.cubeMaterial
+            else if (
+              o.name === 'LEDbase' ||
+              o.name === 'Cylinder' ||
+              o.name === 'Cube' ||
+              o.name === 'Ftwo'
+            )
+              o.material = util.defaultMaterial
+            else if (o.name === 'LED') LEDcreate(o, this.module5, 'glow')
+            else if (
+              o.name === 'Board' ||
+              o.name === 'Fone' ||
+              o.name === 'Fthree'
+            )
+              o.material = util.cubeMaterial
+            else if (o.name === 'Read1' || o.name === 'Correct')
+              o.material = util.flatBlack
+            else if (o.name === 'CED5') CEDcreate(o, this.module5, -0.56)
+            else if (o.name === 'CED6') CEDcreate(o, this.module5, -0.43)
+            else if (o.name === 'CED7') CEDcreate(o, this.module5, -0.3)
+            else if (o.name === 'CED8') CEDcreate(o, this.module5, -0.17)
+            else if (o.name === 'CED9') CEDcreate(o, this.module5, -0.04)
+            else if (o.name.includes('1')) {
+              o.material = new THREE.MeshPhongMaterial({
+                map: this.module5.textures[0]
+              })
+              this.targetList.push(o)
+            } else if (o.name.includes('2')) {
+              o.material = new THREE.MeshPhongMaterial({
+                map: this.module5.textures[1]
+              })
+              this.targetList.push(o)
+            } else if (o.name.includes('3')) {
+              o.material = new THREE.MeshPhongMaterial({
+                map: this.module5.textures[2]
+              })
+              this.targetList.push(o)
+            } else if (o.name.includes('4')) {
+              o.material = new THREE.MeshPhongMaterial({
+                map: this.module5.textures[3]
+              })
+              this.targetList.push(o)
+            } else if (o.name === 'ReadNumber') {
+              o.material = new THREE.MeshPhongMaterial({map: texture5})
+              this.targetList.push(o)
+            } else o.material = util.flatBlack
+          }
+        })
+        this.module5.castShadow = true
+        this.module5.receiveShadow = true
+        this.module5.audio = document.createElement('audio')
+        var source = document.createElement('source')
+        source.src = '/models/sound/press1.mov'
+        this.module5.audio.appendChild(source)
+      })
+    }
 }

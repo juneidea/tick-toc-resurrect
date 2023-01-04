@@ -21,8 +21,6 @@ export default class BombClass {
             0.25,
             16
           )
-
-        // this.projector = undefined
         this.timer = undefined
         this.targetList = []
     }
@@ -153,6 +151,7 @@ export default class BombClass {
         this.module2 = this.box.children[8]
         this.module3 = this.box.children[9]
         this.module4 = this.box.children[10]
+        this.module5 = this.box.children[11]
         // then start the clock
         this.timer = setInterval(() => {
             if(this.state.count < 1) clearInterval(this.timer)
@@ -253,7 +252,6 @@ export default class BombClass {
         glow.visible = true
         LED.material = util.LEDMaterialON
         this.state.modulesPassed += 1
-        console.log(this.state.modulesPassed)
     }
     
     removeTarget(target) {
@@ -281,18 +279,13 @@ export default class BombClass {
     // Game mouse down logic
 
     onDocumentMouseDown = event => {
-        // the following line would stop any other event handler from firing
-        // (such as the mouse's TrackballControls)
-        // event.preventDefault();
+        // start raycaster
         const rect = this.renderer.domElement.getBoundingClientRect();
 
         // update the mouse variable
         this.mouse.x = ( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1;
         this.mouse.y = - ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;
-    
-        // find intersections
-        // create a Ray with origin at the mouse position
-        //   and direction into the scene (camera direction)
+
         let vector = new THREE.Vector3(this.mouse.x, this.mouse.y, 1)
         vector.unproject(this.camera);
         let ray = new THREE.Raycaster(
@@ -480,309 +473,310 @@ export default class BombClass {
             }
     
             // module5
-            // if (this.intersects[0].object.name.includes('Kface')) {
-            //   const lit = str => {
-            //     this.module5.children.filter(a => a.name.includes(str)).map(b => {
-            //       b.visible = true
-            //     })
-            //   }
-            //   const readAgain = () => {
-            //     let texture5 = new THREE.TextureLoader().load(
-            //       `/models/Read${Math.ceil(Math.random() * 4)}.png`
-            //     )
-            //     texture5.wrapT = THREE.RepeatWrapping
-            //     texture5.repeat.y = -1
-            //     this.module5.children.filter(
-            //       a => a.name === 'ReadNumber'
-            //     )[0].material = new THREE.MeshPhongMaterial({map: texture5})
-            //   }
-            //   const resetKey = () => {
-            //     this.module5.children
-            //       .filter(a => a.name.includes('K'))
-            //       .map(b => (b.visible = false))
-            //     this.setKey = k => {
-            //       this.module5.children
-            //         .filter(a => a.name.includes(k))
-            //         .map(b => (b.visible = true))
-            //     }
-            //     this.module5.children.filter(
-            //       a => a.name === 'Kface1'
-            //     )[0].material = new THREE.MeshPhongMaterial({
-            //       map: this.module5.textures[0]
-            //     })
-            //     this.module5.children.filter(
-            //       a => a.name === 'Kface2'
-            //     )[0].material = new THREE.MeshPhongMaterial({
-            //       map: this.module5.textures[1]
-            //     })
-            //     this.module5.children.filter(
-            //       a => a.name === 'Kface3'
-            //     )[0].material = new THREE.MeshPhongMaterial({
-            //       map: this.module5.textures[2]
-            //     })
-            //     this.module5.children.filter(
-            //       a => a.name === 'Kface4'
-            //     )[0].material = new THREE.MeshPhongMaterial({
-            //       map: this.module5.textures[3]
-            //     })
-            //     setTimeout(() => this.setKey('1'), 250)
-            //     setTimeout(() => this.setKey('2'), 500)
-            //     setTimeout(() => this.setKey('3'), 750)
-            //     setTimeout(() => this.setKey('4'), 1000)
-            //   }
-            //   const reRun = () => {
-            //     readAgain()
-            //     this.module5.randomKey()
-            //     resetKey()
-            //   }
-            //   const runDown = () => {
-            //     this.module5.children
-            //       .filter(a => a.name.includes('CCED'))
-            //       .map(b => (b.visible = false))
-            //     this.module5.correct = '5'
-            //   }
-            //   let readNumber = this.module5.children
-            //     .filter(a => a.name === 'ReadNumber')[0]
-            //     .material.map.image.src.slice(-5)[0]
-            //   this.module5.audio.play()
-            //   if (this.module5.correct === '5') {
-            //     if (Number(readNumber) < 3) {
-            //       this.module5.quest[0] = [
-            //         2,
-            //         Number(
-            //           this.module5.children
-            //             .filter(a => a.name === 'Kface2')[0]
-            //             .material.map.image.src.slice(-5, -4)
-            //         )
-            //       ]
-            //     } else {
-            //       this.module5.quest[0] = [
-            //         Number(readNumber),
-            //         Number(
-            //           this.module5.children
-            //             .filter(a => a.name === `Kface${readNumber}`)[0]
-            //             .material.map.image.src.slice(-5, -4)
-            //         )
-            //       ]
-            //     }
-            //     if (
-            //       this.intersects[0].object.name[5] ===
-            //       this.module5.quest[0][0] + ''
-            //     ) {
-            //       lit('5')
-            //       this.module5.correct = '6'
-            //       reRun()
-            //     } else {
-            //       this.box.audio.play()
-            //       this.setStrike()
-            //       reRun()
-            //     }
-            //   } else if (this.module5.correct === '6') {
-            //     if (readNumber === '1') {
-            //       let position4 = this.module5.children
-            //         .filter(a => a.name.includes('Kface'))
-            //         .filter(b => b.material.map.image.src.slice(-5, -4) === '4')[0]
-            //       this.module5.quest[1] = [Number(position4.name.slice(-1)), 4]
-            //     } else if (readNumber === '3') {
-            //       this.module5.quest[1] = [
-            //         1,
-            //         Number(
-            //           this.module5.children
-            //             .filter(a => a.name === `Kface1`)[0]
-            //             .material.map.image.src.slice(-5, -4)
-            //         )
-            //       ]
-            //     } else {
-            //       this.module5.quest[1] = [
-            //         this.module5.quest[0][0],
-            //         Number(
-            //           this.module5.children
-            //             .filter(
-            //               a => a.name === `Kface${this.module5.quest[0][0]}`
-            //             )[0]
-            //             .material.map.image.src.slice(-5, -4)
-            //         )
-            //       ]
-            //     }
-            //     if (
-            //       this.intersects[0].object.name[5] ===
-            //       this.module5.quest[1][0] + ''
-            //     ) {
-            //       lit('6')
-            //       this.module5.correct = '7'
-            //       reRun()
-            //     } else {
-            //       this.box.audio.play()
-            //       this.setStrike()
-            //       runDown()
-            //       reRun()
-            //     }
-            //   } else if (this.module5.correct === '7') {
-            //     if (readNumber === '1') {
-            //       let position = this.module5.children
-            //         .filter(a => a.name.includes('Kface'))
-            //         .filter(
-            //           b =>
-            //             b.material.map.image.src.slice(-5, -4) ===
-            //             this.module5.quest[1][1] + ''
-            //         )[0]
-            //       this.module5.quest[2] = [
-            //         Number(position.name.slice(-1)),
-            //         this.module5.quest[1][1]
-            //       ]
-            //     } else if (readNumber === '2') {
-            //       let position = this.module5.children
-            //         .filter(a => a.name.includes('Kface'))
-            //         .filter(
-            //           b =>
-            //             b.material.map.image.src.slice(-5, -4) ===
-            //             this.module5.quest[0][1] + ''
-            //         )[0]
-            //       this.module5.quest[2] = [
-            //         Number(position.name.slice(-1)),
-            //         this.module5.quest[0][1]
-            //       ]
-            //     } else if (readNumber === '3') {
-            //       this.module5.quest[2] = [
-            //         3,
-            //         Number(
-            //           this.module5.children
-            //             .filter(a => a.name === `Kface3`)[0]
-            //             .material.map.image.src.slice(-5, -4)
-            //         )
-            //       ]
-            //     } else if (readNumber === '4') {
-            //       let position4 = this.module5.children
-            //         .filter(a => a.name.includes('Kface'))
-            //         .filter(b => b.material.map.image.src.slice(-5, -4) === '4')[0]
-            //       this.module5.quest[2] = [Number(position4.name.slice(-1)), 4]
-            //     }
-            //     if (
-            //       this.intersects[0].object.name[5] ===
-            //       this.module5.quest[2][0] + ''
-            //     ) {
-            //       lit('7')
-            //       this.module5.correct = '8'
-            //       reRun()
-            //     } else {
-            //       this.box.audio.play()
-            //       this.setStrike()
-            //       runDown()
-            //       reRun()
-            //     }
-            //   } else if (this.module5.correct === '8') {
-            //     if (readNumber === '1') {
-            //       this.module5.quest[3] = [
-            //         this.module5.quest[0][0],
-            //         Number(
-            //           this.module5.children
-            //             .filter(
-            //               a => a.name === `Kface${this.module5.quest[0][0]}`
-            //             )[0]
-            //             .material.map.image.src.slice(-5, -4)
-            //         )
-            //       ]
-            //     } else if (readNumber === '2') {
-            //       this.module5.quest[3] = [
-            //         1,
-            //         Number(
-            //           this.module5.children
-            //             .filter(a => a.name === `Kface1`)[0]
-            //             .material.map.image.src.slice(-5, -4)
-            //         )
-            //       ]
-            //     } else {
-            //       this.module5.quest[3] = [
-            //         this.module5.quest[1][0],
-            //         Number(
-            //           this.module5.children
-            //             .filter(
-            //               a => a.name === `Kface${this.module5.quest[1][0]}`
-            //             )[0]
-            //             .material.map.image.src.slice(-5, -4)
-            //         )
-            //       ]
-            //     }
-            //     if (
-            //       this.intersects[0].object.name[5] ===
-            //       this.module5.quest[3][0] + ''
-            //     ) {
-            //       lit('8')
-            //       this.module5.correct = '9'
-            //       reRun()
-            //     } else {
-            //       this.box.audio.play()
-            //       this.setStrike()
-            //       runDown()
-            //       reRun()
-            //     }
-            //   } else if (this.module5.correct === '9') {
-            //     if (readNumber === '1') {
-            //       let position = this.module5.children
-            //         .filter(a => a.name.includes('Kface'))
-            //         .filter(
-            //           b =>
-            //             b.material.map.image.src.slice(-5, -4) ===
-            //             this.module5.quest[0][1] + ''
-            //         )[0]
-            //       this.module5.quest[4] = [
-            //         Number(position.name.slice(-1)),
-            //         this.module5.quest[0][1]
-            //       ]
-            //     } else if (readNumber === '2') {
-            //       let position = this.module5.children
-            //         .filter(a => a.name.includes('Kface'))
-            //         .filter(
-            //           b =>
-            //             b.material.map.image.src.slice(-5, -4) ===
-            //             this.module5.quest[1][1] + ''
-            //         )[0]
-            //       this.module5.quest[4] = [
-            //         Number(position.name.slice(-1)),
-            //         this.module5.quest[1][1]
-            //       ]
-            //     } else if (readNumber === '3') {
-            //       let position = this.module5.children
-            //         .filter(a => a.name.includes('Kface'))
-            //         .filter(
-            //           b =>
-            //             b.material.map.image.src.slice(-5, -4) ===
-            //             this.module5.quest[3][1] + ''
-            //         )[0]
-            //       this.module5.quest[4] = [
-            //         Number(position.name.slice(-1)),
-            //         this.module5.quest[3][1]
-            //       ]
-            //     } else if (readNumber === '4') {
-            //       let position = this.module5.children
-            //         .filter(a => a.name.includes('Kface'))
-            //         .filter(
-            //           b =>
-            //             b.material.map.image.src.slice(-5, -4) ===
-            //             this.module5.quest[2][1] + ''
-            //         )[0]
-            //       this.module5.quest[4] = [
-            //         Number(position.name.slice(-1)),
-            //         this.module5.quest[2][1]
-            //       ]
-            //     }
-            //     if (
-            //       this.intersects[0].object.name[5] ===
-            //       this.module5.quest[4][0] + ''
-            //     ) {
-            //       lit('9')
-            //       this.handleKeys()
-            //       this.module5.children
-            //         .filter(a => a.name.includes('Kface'))
-            //         .map(b => this.removeTarget(b))
-            //     } else {
-            //       this.box.audio.play()
-            //       this.setStrike()
-            //       runDown()
-            //       reRun()
-            //     }
-            //   }
-            // }
+            if (this.intersects[0].object.name.includes('Kface')) {
+              const lit = str => {
+                this.module5.children.filter(a => a.name.includes(str)).map(b => {
+                  b.visible = true
+                  return b
+                })
+              }
+              const readAgain = () => {
+                let texture5 = new THREE.TextureLoader().load(
+                  `/models/Read${Math.ceil(Math.random() * 4)}.png`
+                )
+                texture5.wrapT = THREE.RepeatWrapping
+                texture5.repeat.y = -1
+                this.module5.children.filter(
+                  a => a.name === 'ReadNumber'
+                )[0].material = new THREE.MeshPhongMaterial({map: texture5})
+              }
+              const resetKey = () => {
+                this.module5.children
+                  .filter(a => a.name.includes('K'))
+                  .map(b => (b.visible = false))
+                this.setKey = k => {
+                  this.module5.children
+                    .filter(a => a.name.includes(k))
+                    .map(b => (b.visible = true))
+                }
+                this.module5.children.filter(
+                  a => a.name === 'Kface1'
+                )[0].material = new THREE.MeshPhongMaterial({
+                  map: this.module5.textures[0]
+                })
+                this.module5.children.filter(
+                  a => a.name === 'Kface2'
+                )[0].material = new THREE.MeshPhongMaterial({
+                  map: this.module5.textures[1]
+                })
+                this.module5.children.filter(
+                  a => a.name === 'Kface3'
+                )[0].material = new THREE.MeshPhongMaterial({
+                  map: this.module5.textures[2]
+                })
+                this.module5.children.filter(
+                  a => a.name === 'Kface4'
+                )[0].material = new THREE.MeshPhongMaterial({
+                  map: this.module5.textures[3]
+                })
+                setTimeout(() => this.setKey('1'), 250)
+                setTimeout(() => this.setKey('2'), 500)
+                setTimeout(() => this.setKey('3'), 750)
+                setTimeout(() => this.setKey('4'), 1000)
+              }
+              const reRun = () => {
+                readAgain()
+                this.module5.randomKey()
+                resetKey()
+              }
+              const runDown = () => {
+                this.module5.children
+                  .filter(a => a.name.includes('CCED'))
+                  .map(b => (b.visible = false))
+                this.module5.correct = '5'
+              }
+              let readNumber = this.module5.children
+                .filter(a => a.name === 'ReadNumber')[0]
+                .material.map.image.src.slice(-5)[0]
+              this.module5.audio.play()
+              if (this.module5.correct === '5') {
+                if (Number(readNumber) < 3) {
+                  this.module5.quest[0] = [
+                    2,
+                    Number(
+                      this.module5.children
+                        .filter(a => a.name === 'Kface2')[0]
+                        .material.map.image.src.slice(-5, -4)
+                    )
+                  ]
+                } else {
+                  this.module5.quest[0] = [
+                    Number(readNumber),
+                    Number(
+                      this.module5.children
+                        .filter(a => a.name === `Kface${readNumber}`)[0]
+                        .material.map.image.src.slice(-5, -4)
+                    )
+                  ]
+                }
+                if (
+                  this.intersects[0].object.name[5] ===
+                  this.module5.quest[0][0] + ''
+                ) {
+                  lit('5')
+                  this.module5.correct = '6'
+                  reRun()
+                } else {
+                  this.box.audio.play()
+                  this.setStrike()
+                  reRun()
+                }
+              } else if (this.module5.correct === '6') {
+                if (readNumber === '1') {
+                  let position4 = this.module5.children
+                    .filter(a => a.name.includes('Kface'))
+                    .filter(b => b.material.map.image.src.slice(-5, -4) === '4')[0]
+                  this.module5.quest[1] = [Number(position4.name.slice(-1)), 4]
+                } else if (readNumber === '3') {
+                  this.module5.quest[1] = [
+                    1,
+                    Number(
+                      this.module5.children
+                        .filter(a => a.name === `Kface1`)[0]
+                        .material.map.image.src.slice(-5, -4)
+                    )
+                  ]
+                } else {
+                  this.module5.quest[1] = [
+                    this.module5.quest[0][0],
+                    Number(
+                      this.module5.children
+                        .filter(
+                          a => a.name === `Kface${this.module5.quest[0][0]}`
+                        )[0]
+                        .material.map.image.src.slice(-5, -4)
+                    )
+                  ]
+                }
+                if (
+                  this.intersects[0].object.name[5] ===
+                  this.module5.quest[1][0] + ''
+                ) {
+                  lit('6')
+                  this.module5.correct = '7'
+                  reRun()
+                } else {
+                  this.box.audio.play()
+                  this.setStrike()
+                  runDown()
+                  reRun()
+                }
+              } else if (this.module5.correct === '7') {
+                if (readNumber === '1') {
+                  let position = this.module5.children
+                    .filter(a => a.name.includes('Kface'))
+                    .filter(
+                      b =>
+                        b.material.map.image.src.slice(-5, -4) ===
+                        this.module5.quest[1][1] + ''
+                    )[0]
+                  this.module5.quest[2] = [
+                    Number(position.name.slice(-1)),
+                    this.module5.quest[1][1]
+                  ]
+                } else if (readNumber === '2') {
+                  let position = this.module5.children
+                    .filter(a => a.name.includes('Kface'))
+                    .filter(
+                      b =>
+                        b.material.map.image.src.slice(-5, -4) ===
+                        this.module5.quest[0][1] + ''
+                    )[0]
+                  this.module5.quest[2] = [
+                    Number(position.name.slice(-1)),
+                    this.module5.quest[0][1]
+                  ]
+                } else if (readNumber === '3') {
+                  this.module5.quest[2] = [
+                    3,
+                    Number(
+                      this.module5.children
+                        .filter(a => a.name === `Kface3`)[0]
+                        .material.map.image.src.slice(-5, -4)
+                    )
+                  ]
+                } else if (readNumber === '4') {
+                  let position4 = this.module5.children
+                    .filter(a => a.name.includes('Kface'))
+                    .filter(b => b.material.map.image.src.slice(-5, -4) === '4')[0]
+                  this.module5.quest[2] = [Number(position4.name.slice(-1)), 4]
+                }
+                if (
+                  this.intersects[0].object.name[5] ===
+                  this.module5.quest[2][0] + ''
+                ) {
+                  lit('7')
+                  this.module5.correct = '8'
+                  reRun()
+                } else {
+                  this.box.audio.play()
+                  this.setStrike()
+                  runDown()
+                  reRun()
+                }
+              } else if (this.module5.correct === '8') {
+                if (readNumber === '1') {
+                  this.module5.quest[3] = [
+                    this.module5.quest[0][0],
+                    Number(
+                      this.module5.children
+                        .filter(
+                          a => a.name === `Kface${this.module5.quest[0][0]}`
+                        )[0]
+                        .material.map.image.src.slice(-5, -4)
+                    )
+                  ]
+                } else if (readNumber === '2') {
+                  this.module5.quest[3] = [
+                    1,
+                    Number(
+                      this.module5.children
+                        .filter(a => a.name === `Kface1`)[0]
+                        .material.map.image.src.slice(-5, -4)
+                    )
+                  ]
+                } else {
+                  this.module5.quest[3] = [
+                    this.module5.quest[1][0],
+                    Number(
+                      this.module5.children
+                        .filter(
+                          a => a.name === `Kface${this.module5.quest[1][0]}`
+                        )[0]
+                        .material.map.image.src.slice(-5, -4)
+                    )
+                  ]
+                }
+                if (
+                  this.intersects[0].object.name[5] ===
+                  this.module5.quest[3][0] + ''
+                ) {
+                  lit('8')
+                  this.module5.correct = '9'
+                  reRun()
+                } else {
+                  this.box.audio.play()
+                  this.setStrike()
+                  runDown()
+                  reRun()
+                }
+              } else if (this.module5.correct === '9') {
+                if (readNumber === '1') {
+                  let position = this.module5.children
+                    .filter(a => a.name.includes('Kface'))
+                    .filter(
+                      b =>
+                        b.material.map.image.src.slice(-5, -4) ===
+                        this.module5.quest[0][1] + ''
+                    )[0]
+                  this.module5.quest[4] = [
+                    Number(position.name.slice(-1)),
+                    this.module5.quest[0][1]
+                  ]
+                } else if (readNumber === '2') {
+                  let position = this.module5.children
+                    .filter(a => a.name.includes('Kface'))
+                    .filter(
+                      b =>
+                        b.material.map.image.src.slice(-5, -4) ===
+                        this.module5.quest[1][1] + ''
+                    )[0]
+                  this.module5.quest[4] = [
+                    Number(position.name.slice(-1)),
+                    this.module5.quest[1][1]
+                  ]
+                } else if (readNumber === '3') {
+                  let position = this.module5.children
+                    .filter(a => a.name.includes('Kface'))
+                    .filter(
+                      b =>
+                        b.material.map.image.src.slice(-5, -4) ===
+                        this.module5.quest[3][1] + ''
+                    )[0]
+                  this.module5.quest[4] = [
+                    Number(position.name.slice(-1)),
+                    this.module5.quest[3][1]
+                  ]
+                } else if (readNumber === '4') {
+                  let position = this.module5.children
+                    .filter(a => a.name.includes('Kface'))
+                    .filter(
+                      b =>
+                        b.material.map.image.src.slice(-5, -4) ===
+                        this.module5.quest[2][1] + ''
+                    )[0]
+                  this.module5.quest[4] = [
+                    Number(position.name.slice(-1)),
+                    this.module5.quest[2][1]
+                  ]
+                }
+                if (
+                  this.intersects[0].object.name[5] ===
+                  this.module5.quest[4][0] + ''
+                ) {
+                  lit('9')
+                  this.handleKeys()
+                  this.module5.children
+                    .filter(a => a.name.includes('Kface'))
+                    .map(b => this.removeTarget(b))
+                } else {
+                  this.box.audio.play()
+                  this.setStrike()
+                  runDown()
+                  reRun()
+                }
+              }
+            }
           }
         }
       }

@@ -31,7 +31,7 @@ const Bomb = ({ startTime, strikesAllowed }) => {
     setTimeout(() => {
       canvas.handleCountStart()
       setActivated(true)
-    }, 1000)
+    }, 2000)
 
     return () => {
       canvas.stop()
