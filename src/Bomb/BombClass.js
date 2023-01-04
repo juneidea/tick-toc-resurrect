@@ -256,7 +256,7 @@ export default class BombClass {
         glow.visible = true
         LED.material = util.LEDMaterialON
         this.state.modulesPassed += 1
-        if (this.state.modulesPassed === 2) {
+        if (this.state.modulesPassed === 5) {
           this.handleDiffusal()
         }
     }
