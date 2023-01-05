@@ -94,7 +94,7 @@ const NewGame = ({ userName, setGameProps }) => {
         </div>
         <div className="new-game--footer">
           *If you are playing the role of Expert, click{' '}
-          <Link to="/manual">here</Link> to access the manual*
+          <Link to="/manual" target='_blank' >here</Link> to access the manual*
         </div>
         <Footer />
       </>

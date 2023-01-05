@@ -27,3 +27,8 @@ textarea:focus,
 button:focus {
   outline: none;
 }
+
+iframe {
+  width: 90%;
+  height: 90%;
+}
