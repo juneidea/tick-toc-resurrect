@@ -6,8 +6,9 @@ import {
 } from 'react-icons/fa'
 
 import './styles/NewGame.css'
+import Footer from './Footer'
 
-const NewGame = ({ setGameProps }) => {
+const NewGame = ({ userName, setGameProps }) => {
   const [startTime, setStartTime] = useState(300)
   const [strikesAllowed, setStrikesAllowed] = useState(true)
 
@@ -32,6 +33,8 @@ const NewGame = ({ setGameProps }) => {
   const seconds = startTime % 60
     return (
       <>
+        <div className="title">TICK-TOC</div>
+        <div className="user">{userName}</div>
         <div className="new-game-container">
           <div>
             <div className="new-game--config">
@@ -93,6 +96,7 @@ const NewGame = ({ setGameProps }) => {
           *If you are playing the role of Expert, click{' '}
           <Link to="/manual">here</Link> to access the manual*
         </div>
+        <Footer />
       </>
     )
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import './styles/Login.css'
+import Footer from './Footer'
 
 const Login = ({ setUserName }) => {
   const [playerName, setPlayerName] = useState('')
@@ -27,6 +28,7 @@ const Login = ({ setUserName }) => {
 
   return (
     <>
+        <div className="title">TICK-TOC</div>
         <div className="login-form-container">
           <div>
             <form onSubmit={handleSubmit} className="login-form">
@@ -50,6 +52,7 @@ const Login = ({ setUserName }) => {
             </form>
           </div>
         </div>
+        <Footer />
     </>
   )
 }

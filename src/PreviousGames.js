@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import SingleGame from './SingleGame'
 import NoGames from './NoGames'
 
-const PreviousGames = () => {
+const PreviousGames = ({userName}) => {
   const [pageNumber, setPageNumber] = useState(0)
   const [games, setGames] = useState([])
   const [loading, setLoading] = useState(true)
@@ -32,6 +32,7 @@ const PreviousGames = () => {
   if (!game) return <NoGames />
   return (
     <div>
+      <div className="user">{userName}</div>
       <SingleGame game={game}>
         <Link to="/">
           <button className="button" type="button">

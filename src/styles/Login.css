@@ -137,3 +137,11 @@
 .button2:hover {
   text-shadow: 0px 0px 4px #ffffff;
 }
+
+.title {
+  font-family: 'Digital';
+  font-size: 8rem;
+  color: #f90404;
+  margin-top: 10px;
+  animation: ticktoc 1s linear infinite;
+}
