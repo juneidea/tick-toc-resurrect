@@ -77,7 +77,7 @@ const NewGame = ({ setGameProps }) => {
             </div>
             <div className="new-game--select">
               <Link to="/">
-                <button className="button" type="button">
+                <button className="button3" type="button">
                   BACK
                 </button>
               </Link>

@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect} from 'react'
 import {FaCog} from 'react-icons/fa'
-import * as THREE from 'three'
 
 import './../styles/Bomb.css'
 import './../styles/Banner.css'
@@ -26,10 +25,8 @@ const Bomb = ({ startTime, strikesAllowed }) => {
   const mount = useRef(null)
 
   useEffect(() => {
-    const renderer = new THREE.WebGLRenderer({ antialias: true })
-    
     const canvas = new BombClass(mount.current, state, setActivated, setRestart, setGameStatus, setFinishGame)
-    canvas.initialize(renderer)
+    canvas.initialize()
     canvas.animate()
     setTimeout(() => {
       canvas.handleCountStart()

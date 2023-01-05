@@ -29,8 +29,8 @@ export default class BombClass {
         this.targetList = []
     }
 
-    initialize(renderer) {
-        this.renderer = renderer
+    initialize() {
+        this.renderer = new THREE.WebGLRenderer({ antialias: true })
         this.camera.position.set(0, 1.8, 4)
         this.scene.add(new THREE.AmbientLight(0x505050))
     

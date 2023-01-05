@@ -50,7 +50,7 @@
 .login-field-labels div {
   text-transform: uppercase;
   font-size: 2rem;
-  padding: 15px;
+  padding: 10px;
   border: 5px solid #131313;
   z-index: 1;
   background-color: #201f1c;
@@ -76,12 +76,12 @@
   color: #f90404;
   text-shadow: 0px 0px 4px #f90404;
   background-color: #080401;
-  font-size: 1.25rem;
+  font-size: 1.75rem;
   padding: 20px;
   border: none;
   margin-left: 20px;
   margin-right: 20px;
-  width: 100%;
+  width: 90%;
 }
 
 .login-fields input:hover {
@@ -92,8 +92,16 @@
   background-color: #080401;
 }
 
+.login-fields input:-webkit-autofill,
+.login-fields input:-webkit-autofill:hover, 
+.login-fields input:-webkit-autofill:focus, 
+.login-fields input:-webkit-autofill:active { 
+  -webkit-box-shadow: 0 0 0 40px #080401 inset !important;
+  -webkit-text-fill-color: #f90404;
+}
+
 .login-signup--button {
-  background-color: #699b42;
+  background-image: linear-gradient(green,rgb(71, 189, 71));
   margin: 20px 20px 0px 20px;
   width: 100%;
 }
@@ -115,4 +123,17 @@
   font-weight: 600;
   position: absolute;
   font-size: 0.9rem;
+}
+
+.button2 {
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 2rem;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.button2:hover {
+  text-shadow: 0px 0px 4px #ffffff;
 }

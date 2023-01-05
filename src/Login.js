@@ -40,6 +40,7 @@ const Login = ({ setUserName }) => {
                     name="username"
                     onChange={handleChange}
                     value={playerName}
+                    spellCheck={false}
                   />
                 </div>
               </div>

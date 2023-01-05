@@ -106,13 +106,9 @@
   margin: 20px 0px;
 }
 
-.new-game--select button {
-  transform: rotate(-3deg);
-}
-
 .new-game--start {
   cursor: pointer;
-  background-color: #8e1a1a;
+  background-image: radial-gradient(#f62f2f, #761414);
   height: 150px;
   width: 150px;
   border-radius: 50%;
@@ -121,6 +117,7 @@
   justify-content: center;
   color: rgba(255, 255, 255, 0.87);
   font-size: 2.5rem;
+  user-select: none;
 }
 
 .new-game--start:hover {
@@ -157,4 +154,19 @@
 
 .time {
   user-select: none;
+}
+
+.button3 {
+  border: none;
+  color: #222222;
+  background-image: linear-gradient(#888888,#dddddd);
+  cursor: pointer;
+  font-size: 2rem;
+  padding: 20px;
+  border-radius: 10px;
+  user-select: none;
+}
+
+.button3:hover {
+  text-shadow: 0px 0px 4px #666666;
 }
