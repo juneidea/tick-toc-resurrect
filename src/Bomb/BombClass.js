@@ -344,7 +344,7 @@ export default class BombClass {
         const rect = this.renderer.domElement.getBoundingClientRect();
 
         // update the mouse variable
-        this.mouse.x = ( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1;
+        this.mouse.x = ( ( event.clientX - rect.left ) / ( rect.right - rect.left ) ) * 2 - 1;
         this.mouse.y = - ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;
 
         let vector = new THREE.Vector3(this.mouse.x, this.mouse.y, 1)
