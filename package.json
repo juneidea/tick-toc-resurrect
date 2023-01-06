@@ -27,7 +27,7 @@
     "web-vitals": "^2.1.4"
   },
   "proxy": "http://localhost:8080",
-  "engines" {
+  "engines": {
     "node": "18.12.1",
     "npm:": "8.19.2"
   },
