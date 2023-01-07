@@ -2,7 +2,7 @@
 
 # Tick Toc
 
-Tick Toc is a reverse-engineered web application of the popular game, [Keep Talking and Nobody Explodes](https://keeptalkinggame.com/). One "Diffuser" and one or more "Experts" communicate in a collaborative effort to defuse a bomb before the countdown strikes zero. This project was built by [@juneidea](https://github.com/juneidea), [@celipas](https://github.com/celipas), and [@evanalto](https://github.com/EvanAlto), over the course of 2.5 weeks, during our amazing time at the [Fullstack Academy of Code](https://www.fullstackacademy.com/). You may play for yourself at <https://tick-toc2.herokuapp.com>. 
+Tick Toc is a reverse-engineered web application of the popular game, [Keep Talking and Nobody Explodes](https://keeptalkinggame.com/). One "Diffuser" and one or more "Experts" communicate in a collaborative effort to defuse a bomb before the countdown strikes zero. This project was built by [@juneidea](https://github.com/juneidea), [@celipas](https://github.com/celipas), and [@evanalto](https://github.com/EvanAlto), over the course of 2.5 weeks, during our amazing time at the [Fullstack Academy of Code](https://www.fullstackacademy.com/). You may play for yourself at <https://tick-toc.herokuapp.com>. 
 
 For more information regarding this student project, please click and watch the video below:
 
