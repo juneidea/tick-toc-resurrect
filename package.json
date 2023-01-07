@@ -32,9 +32,8 @@
     "npm:": "8.19.2"
   },
   "scripts": {
-    "start": "nodemon server -e html,js,scss --ignore public --ignore client",
     "seed": "node script/seed.js",
-    "heroku-postbuild": "npm run build && react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
