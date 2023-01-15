@@ -4,7 +4,7 @@ const pkg = require('../../package.json')
 const databaseName = pkg.name + (process.env.NODE_ENV === 'test' ? '-test' : '')
 
 const db = new Sequelize(
-  process.env.DB_HOST ? `postgres://postgres:password@${process.env.DB_HOST}:5432/${databaseName}`: `postgres://postgres:password@postgres-0:5432/${databaseName}`,
+  process.env.DB_HOST ? `postgres://postgres:password@${process.env.DB_HOST}:5432/${process.env.DB_DATABASE}`: `postgres://postgres:password@postgres-0:5432/${databaseName}`,
   {
     logging: false,
     dialectOptions: process.env.DATABASE_URL ? {

@@ -11,6 +11,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=tick-toc2
+    env_file:
+      - .env
   app:
     build: .
     container_name: tick-toc
@@ -22,6 +24,8 @@ services:
       DB_PASSWORD: password
       DB_DATABASE: tick-toc2
       DB_HOST: database
+    env_file:
+      - .env
     volumes:
       - .:/app
     depends_on:
